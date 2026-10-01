@@ -1,0 +1,710 @@
+{
+ "note": "encode(text) -> ids over the reference ByteTokenizer. Markers are matched left-to-right by one alternation regex in SPECIALS order; everything else is UTF-8 bytes. decode drops ids outside 0..264, flushes the pending byte buffer (errors='replace') at every marker, and emits the marker text.",
+ "vocab_size": 265,
+ "specials": [
+  {
+   "text": "<think>",
+   "id": 256
+  },
+  {
+   "text": "</think>",
+   "id": 257
+  },
+  {
+   "text": "<user>",
+   "id": 258
+  },
+  {
+   "text": "</user>",
+   "id": 259
+  },
+  {
+   "text": "<bot>",
+   "id": 260
+  },
+  {
+   "text": "</bot>",
+   "id": 261
+  },
+  {
+   "text": "<g>",
+   "id": 262
+  },
+  {
+   "text": "</g>",
+   "id": 263
+  },
+  {
+   "text": "<|endoftext|>",
+   "id": 264
+  }
+ ],
+ "encode_cases": [
+  {
+   "text": "",
+   "ids": [],
+   "utf8_hex": "",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "a",
+   "ids": [97],
+   "utf8_hex": "61",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "hello world",
+   "ids": [104,101,108,108,111,32,119,111,114,108,100],
+   "utf8_hex": "68656c6c6f20776f726c64",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "Hello, World! 123\n\ttab and newline",
+   "ids": [72,101,108,108,111,44,32,87,111,114,108,100,33,32,49,50,51,10,9,116,97,98,32,97,110,100,32,110,101,119,108,105,110,101],
+   "utf8_hex": "48656c6c6f2c20576f726c6421203132330a0974616220616e64206e65776c696e65",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "<think>",
+   "ids": [256],
+   "utf8_hex": "3c7468696e6b3e",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "</think>",
+   "ids": [257],
+   "utf8_hex": "3c2f7468696e6b3e",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "<user>",
+   "ids": [258],
+   "utf8_hex": "3c757365723e",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "</user>",
+   "ids": [259],
+   "utf8_hex": "3c2f757365723e",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "<bot>",
+   "ids": [260],
+   "utf8_hex": "3c626f743e",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "</bot>",
+   "ids": [261],
+   "utf8_hex": "3c2f626f743e",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "<g>",
+   "ids": [262],
+   "utf8_hex": "3c673e",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "</g>",
+   "ids": [263],
+   "utf8_hex": "3c2f673e",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "<|endoftext|>",
+   "ids": [264],
+   "utf8_hex": "3c7c656e646f66746578747c3e",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "<think>reason</think><bot>answer</bot>",
+   "ids": [256,114,101,97,115,111,110,257,260,97,110,115,119,101,114,261],
+   "utf8_hex": "3c7468696e6b3e726561736f6e3c2f7468696e6b3e3c626f743e616e737765723c2f626f743e",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "<user>hi</user><bot>yo</bot><|endoftext|>",
+   "ids": [258,104,105,259,260,121,111,261,264],
+   "utf8_hex": "3c757365723e68693c2f757365723e3c626f743e796f3c2f626f743e3c7c656e646f66746578747c3e",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "<g></g>",
+   "ids": [262,263],
+   "utf8_hex": "3c673e3c2f673e",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "<think><think></think></think>",
+   "ids": [256,256,257,257],
+   "utf8_hex": "3c7468696e6b3e3c7468696e6b3e3c2f7468696e6b3e3c2f7468696e6b3e",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "<g><g><g>",
+   "ids": [262,262,262],
+   "utf8_hex": "3c673e3c673e3c673e",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "<g>1850</g>",
+   "ids": [262,49,56,53,48,263],
+   "utf8_hex": "3c673e313835303c2f673e",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "<g 1850 1-0>",
+   "ids": [60,103,32,49,56,53,48,32,49,45,48,62],
+   "utf8_hex": "3c67203138353020312d303e",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "<g 1850 1-0></g>",
+   "ids": [60,103,32,49,56,53,48,32,49,45,48,62,263],
+   "utf8_hex": "3c67203138353020312d303e3c2f673e",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "x<g 1850 1-0>y<g>z",
+   "ids": [120,60,103,32,49,56,53,48,32,49,45,48,62,121,262,122],
+   "utf8_hex": "783c67203138353020312d303e793c673e7a",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "<G>",
+   "ids": [60,71,62],
+   "utf8_hex": "3c473e",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "<THINK>",
+   "ids": [60,84,72,73,78,75,62],
+   "utf8_hex": "3c5448494e4b3e",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "< g>",
+   "ids": [60,32,103,62],
+   "utf8_hex": "3c20673e",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "<g >",
+   "ids": [60,103,32,62],
+   "utf8_hex": "3c67203e",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "<think",
+   "ids": [60,116,104,105,110,107],
+   "utf8_hex": "3c7468696e6b",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "think>",
+   "ids": [116,104,105,110,107,62],
+   "utf8_hex": "7468696e6b3e",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "</think",
+   "ids": [60,47,116,104,105,110,107],
+   "utf8_hex": "3c2f7468696e6b",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "<<think>>",
+   "ids": [60,256,62],
+   "utf8_hex": "3c3c7468696e6b3e3e",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "<</think>>",
+   "ids": [60,257,62],
+   "utf8_hex": "3c3c2f7468696e6b3e3e",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "<think>>",
+   "ids": [256,62],
+   "utf8_hex": "3c7468696e6b3e3e",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "<|endoftext|",
+   "ids": [60,124,101,110,100,111,102,116,101,120,116,124],
+   "utf8_hex": "3c7c656e646f66746578747c",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "<|endoftext |>",
+   "ids": [60,124,101,110,100,111,102,116,101,120,116,32,124,62],
+   "utf8_hex": "3c7c656e646f6674657874207c3e",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "<|endoftext|><|endoftext|>",
+   "ids": [264,264],
+   "utf8_hex": "3c7c656e646f66746578747c3e3c7c656e646f66746578747c3e",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "<user><bot>",
+   "ids": [258,260],
+   "utf8_hex": "3c757365723e3c626f743e",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "</user></bot>",
+   "ids": [259,261],
+   "utf8_hex": "3c2f757365723e3c2f626f743e",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "<thinking>",
+   "ids": [60,116,104,105,110,107,105,110,103,62],
+   "utf8_hex": "3c7468696e6b696e673e",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "<think/>",
+   "ids": [60,116,104,105,110,107,47,62],
+   "utf8_hex": "3c7468696e6b2f3e",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "<t<think>hink>",
+   "ids": [60,116,256,104,105,110,107,62],
+   "utf8_hex": "3c743c7468696e6b3e68696e6b3e",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "<bot><user></bot></user>",
+   "ids": [260,258,261,259],
+   "utf8_hex": "3c626f743e3c757365723e3c2f626f743e3c2f757365723e",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "<g> <g>",
+   "ids": [262,32,262],
+   "utf8_hex": "3c673e203c673e",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "text <think> middle </think> text",
+   "ids": [116,101,120,116,32,256,32,109,105,100,100,108,101,32,257,32,116,101,120,116],
+   "utf8_hex": "74657874203c7468696e6b3e206d6964646c65203c2f7468696e6b3e2074657874",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "h\u00e9llo w\u00f6rld",
+   "ids": [104,195,169,108,108,111,32,119,195,182,114,108,100],
+   "utf8_hex": "68c3a96c6c6f2077c3b6726c64",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "na\u00efve caf\u00e9",
+   "ids": [110,97,195,175,118,101,32,99,97,102,195,169],
+   "utf8_hex": "6e61c3af766520636166c3a9",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "\u65e5\u672c\u8a9e\u306e\u30c6\u30ad\u30b9\u30c8",
+   "ids": [230,151,165,230,156,172,232,170,158,227,129,174,227,131,134,227,130,173,227,130,185,227,131,136],
+   "utf8_hex": "e697a5e69cace8aa9ee381aee38386e382ade382b9e38388",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "\u0645\u0631\u062d\u0628\u0627",
+   "ids": [217,133,216,177,216,173,216,168,216,167],
+   "utf8_hex": "d985d8b1d8add8a8d8a7",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "\ud83d\ude00",
+   "ids": [240,159,152,128],
+   "utf8_hex": "f09f9880",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "\ud83d\ude00<think>\ud83d\ude80</think>",
+   "ids": [240,159,152,128,256,240,159,154,128,257],
+   "utf8_hex": "f09f98803c7468696e6b3ef09f9a803c2f7468696e6b3e",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "\u00e9<g>\u00e9",
+   "ids": [195,169,262,195,169],
+   "utf8_hex": "c3a93c673ec3a9",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "a\u0301",
+   "ids": [97,204,129],
+   "utf8_hex": "61cc81",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "\u0000",
+   "ids": [0],
+   "utf8_hex": "00",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "nul\u0000byte",
+   "ids": [110,117,108,0,98,121,116,101],
+   "utf8_hex": "6e756c0062797465",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "line1\r\nline2",
+   "ids": [108,105,110,101,49,13,10,108,105,110,101,50],
+   "utf8_hex": "6c696e65310d0a6c696e6532",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "\u2028\u2029",
+   "ids": [226,128,168,226,128,169],
+   "utf8_hex": "e280a8e280a9",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "\ufeffBOM",
+   "ids": [239,187,191,66,79,77],
+   "utf8_hex": "efbbbf424f4d",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "\ud7ff\ue000\uffff",
+   "ids": [237,159,191,238,128,128,239,191,191],
+   "utf8_hex": "ed9fbfee8080efbfbf",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+   "ids": [120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120,120],
+   "utf8_hex": "78787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "<think><think><think><think><think>",
+   "ids": [256,256,256,256,256],
+   "utf8_hex": "3c7468696e6b3e3c7468696e6b3e3c7468696e6b3e3c7468696e6b3e3c7468696e6b3e",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "a<g 1>b</g 2>c",
+   "ids": [97,60,103,32,49,62,98,60,47,103,32,50,62,99],
+   "utf8_hex": "613c6720313e623c2f6720323e63",
+   "roundtrip_decode_equals_text": true
+  },
+  {
+   "text": "<|endoftext|>x<|endoftext|>",
+   "ids": [264,120,264],
+   "utf8_hex": "3c7c656e646f66746578747c3e783c7c656e646f66746578747c3e",
+   "roundtrip_decode_equals_text": true
+  }
+ ],
+ "decode_cases": [
+  {
+   "name": "empty",
+   "ids": [],
+   "input_bytes_hex": "",
+   "text": "",
+   "text_utf8_hex": "",
+   "n_replacement_chars": 0
+  },
+  {
+   "name": "ascii",
+   "ids": [72,105],
+   "input_bytes_hex": "4869",
+   "text": "Hi",
+   "text_utf8_hex": "4869",
+   "n_replacement_chars": 0
+  },
+  {
+   "name": "markers_only",
+   "ids": [256,257],
+   "input_bytes_hex": null,
+   "text": "<think></think>",
+   "text_utf8_hex": "3c7468696e6b3e3c2f7468696e6b3e",
+   "n_replacement_chars": 0
+  },
+  {
+   "name": "all_markers",
+   "ids": [256,257,258,259,260,261,262,263,264],
+   "input_bytes_hex": null,
+   "text": "<think></think><user></user><bot></bot><g></g><|endoftext|>",
+   "text_utf8_hex": "3c7468696e6b3e3c2f7468696e6b3e3c757365723e3c2f757365723e3c626f743e3c2f626f743e3c673e3c2f673e3c7c656e646f66746578747c3e",
+   "n_replacement_chars": 0
+  },
+  {
+   "name": "lone_continuation_byte",
+   "ids": [128],
+   "input_bytes_hex": "80",
+   "text": "\ufffd",
+   "text_utf8_hex": "efbfbd",
+   "n_replacement_chars": 1
+  },
+  {
+   "name": "lone_ff",
+   "ids": [255,65],
+   "input_bytes_hex": "ff41",
+   "text": "\ufffdA",
+   "text_utf8_hex": "efbfbd41",
+   "n_replacement_chars": 1
+  },
+  {
+   "name": "ff_fe",
+   "ids": [255,254],
+   "input_bytes_hex": "fffe",
+   "text": "\ufffd\ufffd",
+   "text_utf8_hex": "efbfbdefbfbd",
+   "n_replacement_chars": 2
+  },
+  {
+   "name": "truncated_3byte_euro",
+   "ids": [226,130],
+   "input_bytes_hex": "e282",
+   "text": "\ufffd",
+   "text_utf8_hex": "efbfbd",
+   "n_replacement_chars": 1
+  },
+  {
+   "name": "truncated_4byte_emoji",
+   "ids": [240,159,152],
+   "input_bytes_hex": "f09f98",
+   "text": "\ufffd",
+   "text_utf8_hex": "efbfbd",
+   "n_replacement_chars": 1
+  },
+  {
+   "name": "truncated_then_ascii",
+   "ids": [226,130,65],
+   "input_bytes_hex": "e28241",
+   "text": "\ufffdA",
+   "text_utf8_hex": "efbfbd41",
+   "n_replacement_chars": 1
+  },
+  {
+   "name": "valid_euro",
+   "ids": [226,130,172],
+   "input_bytes_hex": "e282ac",
+   "text": "\u20ac",
+   "text_utf8_hex": "e282ac",
+   "n_replacement_chars": 0
+  },
+  {
+   "name": "valid_emoji",
+   "ids": [240,159,152,128],
+   "input_bytes_hex": "f09f9880",
+   "text": "\ud83d\ude00",
+   "text_utf8_hex": "f09f9880",
+   "n_replacement_chars": 0
+  },
+  {
+   "name": "overlong_c0_80",
+   "ids": [192,128],
+   "input_bytes_hex": "c080",
+   "text": "\ufffd\ufffd",
+   "text_utf8_hex": "efbfbdefbfbd",
+   "n_replacement_chars": 2
+  },
+  {
+   "name": "overlong_e0_80_80",
+   "ids": [224,128,128],
+   "input_bytes_hex": "e08080",
+   "text": "\ufffd\ufffd\ufffd",
+   "text_utf8_hex": "efbfbdefbfbdefbfbd",
+   "n_replacement_chars": 3
+  },
+  {
+   "name": "surrogate_ed_a0_80",
+   "ids": [237,160,128],
+   "input_bytes_hex": "eda080",
+   "text": "\ufffd\ufffd\ufffd",
+   "text_utf8_hex": "efbfbdefbfbdefbfbd",
+   "n_replacement_chars": 3
+  },
+  {
+   "name": "above_max_f4_90_80_80",
+   "ids": [244,144,128,128],
+   "input_bytes_hex": "f4908080",
+   "text": "\ufffd\ufffd\ufffd\ufffd",
+   "text_utf8_hex": "efbfbdefbfbdefbfbdefbfbd",
+   "n_replacement_chars": 4
+  },
+  {
+   "name": "bad_continuation_e2_28_a1",
+   "ids": [226,40,161],
+   "input_bytes_hex": "e228a1",
+   "text": "\ufffd(\ufffd",
+   "text_utf8_hex": "efbfbd28efbfbd",
+   "n_replacement_chars": 2
+  },
+  {
+   "name": "marker_flushes_partial_utf8",
+   "ids": [226,130,256,172],
+   "input_bytes_hex": null,
+   "text": "\ufffd<think>\ufffd",
+   "text_utf8_hex": "efbfbd3c7468696e6b3eefbfbd",
+   "n_replacement_chars": 2
+  },
+  {
+   "name": "marker_between_valid",
+   "ids": [104,262,105],
+   "input_bytes_hex": null,
+   "text": "h<g>i",
+   "text_utf8_hex": "683c673e69",
+   "n_replacement_chars": 0
+  },
+  {
+   "name": "partial_before_endoftext",
+   "ids": [240,159,264],
+   "input_bytes_hex": null,
+   "text": "\ufffd<|endoftext|>",
+   "text_utf8_hex": "efbfbd3c7c656e646f66746578747c3e",
+   "n_replacement_chars": 1
+  },
+  {
+   "name": "out_of_range_ignored",
+   "ids": [72,300,105,265,1000,99999],
+   "input_bytes_hex": null,
+   "text": "Hi",
+   "text_utf8_hex": "4869",
+   "n_replacement_chars": 0
+  },
+  {
+   "name": "negative_ignored",
+   "ids": [72,-1,105,-256],
+   "input_bytes_hex": null,
+   "text": "Hi",
+   "text_utf8_hex": "4869",
+   "n_replacement_chars": 0
+  },
+  {
+   "name": "nul_byte",
+   "ids": [0,65,0],
+   "input_bytes_hex": "004100",
+   "text": "\u0000A\u0000",
+   "text_utf8_hex": "004100",
+   "n_replacement_chars": 0
+  },
+  {
+   "name": "trailing_partial",
+   "ids": [65,195],
+   "input_bytes_hex": "41c3",
+   "text": "A\ufffd",
+   "text_utf8_hex": "41efbfbd",
+   "n_replacement_chars": 1
+  },
+  {
+   "name": "lead_c3_then_marker",
+   "ids": [195,259,169],
+   "input_bytes_hex": null,
+   "text": "\ufffd</user>\ufffd",
+   "text_utf8_hex": "efbfbd3c2f757365723eefbfbd",
+   "n_replacement_chars": 2
+  },
+  {
+   "name": "two_byte_split_by_nothing",
+   "ids": [195,169,195,169],
+   "input_bytes_hex": "c3a9c3a9",
+   "text": "\u00e9\u00e9",
+   "text_utf8_hex": "c3a9c3a9",
+   "n_replacement_chars": 0
+  }
+ ],
+ "token_to_id_cases": [
+  {
+   "token": "<think>",
+   "id": 256
+  },
+  {
+   "token": "</think>",
+   "id": 257
+  },
+  {
+   "token": "<user>",
+   "id": 258
+  },
+  {
+   "token": "</user>",
+   "id": 259
+  },
+  {
+   "token": "<bot>",
+   "id": 260
+  },
+  {
+   "token": "</bot>",
+   "id": 261
+  },
+  {
+   "token": "<g>",
+   "id": 262
+  },
+  {
+   "token": "</g>",
+   "id": 263
+  },
+  {
+   "token": "<|endoftext|>",
+   "id": 264
+  },
+  {
+   "token": "a",
+   "id": 97
+  },
+  {
+   "token": "A",
+   "id": 65
+  },
+  {
+   "token": "0",
+   "id": 48
+  },
+  {
+   "token": " ",
+   "id": 32
+  },
+  {
+   "token": "\u0000",
+   "id": 0
+  },
+  {
+   "token": "\u007f",
+   "id": 127
+  },
+  {
+   "token": "\u00e9",
+   "id": null
+  },
+  {
+   "token": "ab",
+   "id": null
+  },
+  {
+   "token": "",
+   "id": null
+  },
+  {
+   "token": "<g 1>",
+   "id": null
+  },
+  {
+   "token": "<THINK>",
+   "id": null
+  },
+  {
+   "token": "think",
+   "id": null
+  },
+  {
+   "token": "\u20ac",
+   "id": null
+  }
+ ]
+}

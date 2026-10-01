@@ -1,0 +1,45 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "LLM Trainer",
+  "version": "0.1.0",
+  "identifier": "com.example.llmtrainer",
+  "build": {
+    "beforeDevCommand": "pnpm --filter ui dev",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "pnpm --filter ui build",
+    "frontendDist": "../ui/dist"
+  },
+  "app": {
+    "withGlobalTauri": false,
+    "windows": [
+      {
+        "label": "main",
+        "title": "LLM Trainer",
+        "width": 1360,
+        "height": 860,
+        "minWidth": 1040,
+        "minHeight": 700,
+        "dragDropEnabled": true
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; connect-src 'self' ipc: http://ipc.localhost"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "category": "Education",
+    "shortDescription": "Train a small language model on your own computer",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "macOS": { "minimumSystemVersion": "12.0", "signingIdentity": "-" },
+    "windows": { "webviewInstallMode": { "type": "downloadBootstrapper" }, "nsis": { "installMode": "currentUser" } },
+    "linux": { "deb": { "depends": ["libwebkit2gtk-4.1-0"] } }
+  }
+}

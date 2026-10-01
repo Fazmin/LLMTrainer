@@ -1,0 +1,3504 @@
+{
+ "note": "Scenarios drive a reference PagedPool directly. `state` after each op holds every bookkeeping field. Ties in `mass` among positive entries are avoided on purpose (torch.argsort(descending) is unstable on ties).",
+ "d_model": 32,
+ "d_ff": 16,
+ "scenarios": [
+  {
+   "name": "first_admission_and_lru_eviction",
+   "description": "Empty card filled by the first admission (slots in mass-descending order), then single-expert admissions that evict the occupant with the smallest last_seen (empty slots first; ties -> lowest slot index). No exploration.",
+   "config": {
+    "n_experts": 8,
+    "resident": 4,
+    "ram_capacity": 3,
+    "explore_bias": 0.65,
+    "explore_steps": 1000.0
+   },
+   "steps": [
+    {
+     "op": "init",
+     "state": {
+      "slots": [-1,-1,-1,-1],
+      "admitted": [],
+      "merited": [],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       false,
+       false,
+       false
+      ],
+      "last_seen": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "admits": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "ever": [
+       false,
+       false,
+       false,
+       false,
+       false,
+       false,
+       false,
+       false
+      ],
+      "loads": 0,
+      "swaps": 0,
+      "segments": 0,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": null,
+      "merit_vote": null,
+      "voted": false,
+      "ram_order": [],
+      "tiers": {
+       "reads": 0,
+       "hits": 0,
+       "evictions": 0,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "begin_text",
+     "explore": false,
+     "state": {
+      "slots": [-1,-1,-1,-1],
+      "admitted": [],
+      "merited": [],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       false,
+       false,
+       false
+      ],
+      "last_seen": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "admits": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "ever": [
+       false,
+       false,
+       false,
+       false,
+       false,
+       false,
+       false,
+       false
+      ],
+      "loads": 0,
+      "swaps": 0,
+      "segments": 1,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": null,
+      "merit_vote": null,
+      "voted": false,
+      "ram_order": [],
+      "tiers": {
+       "reads": 0,
+       "hits": 0,
+       "evictions": 0,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "admit",
+     "mass": [0.9,0.5,0.0,1.2,0.3,0.0,0.7,0.1],
+     "merit": null,
+     "returned_loads": 4,
+     "state": {
+      "slots": [3,0,6,1],
+      "admitted": [0,1,3,6],
+      "merited": [0,1,3,6],
+      "admitting": false,
+      "admitted_mask": [
+       true,
+       true,
+       true,
+       true
+      ],
+      "last_seen": [1.0,1.0,0.0,1.0,0.0,0.0,1.0,0.0],
+      "admits": [1.0,1.0,0.0,1.0,0.0,0.0,1.0,0.0],
+      "ever": [
+       true,
+       true,
+       false,
+       true,
+       false,
+       false,
+       true,
+       false
+      ],
+      "loads": 4,
+      "swaps": 1,
+      "segments": 1,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": [0.9,0.5,0.0,1.2,0.3,0.0,0.7,0.1],
+      "merit_vote": [0.9,0.5,0.0,1.2,0.3,0.0,0.7,0.1],
+      "voted": true,
+      "ram_order": [0,6,1],
+      "tiers": {
+       "reads": 4,
+       "hits": 0,
+       "evictions": 1,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "admit",
+     "mass": [0.0,0.0,2.0,0.0,1.5,0.0,0.0,0.0],
+     "merit": null,
+     "returned_loads": 0,
+     "state": {
+      "slots": [3,0,6,1],
+      "admitted": [0,1,3,6],
+      "merited": [0,1,3,6],
+      "admitting": false,
+      "admitted_mask": [
+       true,
+       true,
+       true,
+       true
+      ],
+      "last_seen": [1.0,1.0,0.0,1.0,0.0,0.0,1.0,0.0],
+      "admits": [1.0,1.0,0.0,1.0,0.0,0.0,1.0,0.0],
+      "ever": [
+       true,
+       true,
+       false,
+       true,
+       false,
+       false,
+       true,
+       false
+      ],
+      "loads": 4,
+      "swaps": 1,
+      "segments": 1,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": [0.9,0.5,0.0,1.2,0.3,0.0,0.7,0.1],
+      "merit_vote": [0.9,0.5,0.0,1.2,0.3,0.0,0.7,0.1],
+      "voted": true,
+      "ram_order": [0,6,1],
+      "tiers": {
+       "reads": 4,
+       "hits": 0,
+       "evictions": 1,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "begin_text",
+     "explore": false,
+     "state": {
+      "slots": [3,0,6,1],
+      "admitted": [],
+      "merited": [],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       false,
+       false,
+       false
+      ],
+      "last_seen": [1.0,1.0,0.0,1.0,0.0,0.0,1.0,0.0],
+      "admits": [1.0,1.0,0.0,1.0,0.0,0.0,1.0,0.0],
+      "ever": [
+       true,
+       true,
+       false,
+       true,
+       false,
+       false,
+       true,
+       false
+      ],
+      "loads": 4,
+      "swaps": 1,
+      "segments": 2,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": null,
+      "merit_vote": null,
+      "voted": false,
+      "ram_order": [0,6,1],
+      "tiers": {
+       "reads": 4,
+       "hits": 0,
+       "evictions": 1,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "admit",
+     "mass": [1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+     "merit": null,
+     "returned_loads": 0,
+     "state": {
+      "slots": [3,0,6,1],
+      "admitted": [0],
+      "merited": [0],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       true,
+       false,
+       false
+      ],
+      "last_seen": [2.0,1.0,0.0,1.0,0.0,0.0,1.0,0.0],
+      "admits": [1.0,1.0,0.0,1.0,0.0,0.0,1.0,0.0],
+      "ever": [
+       true,
+       true,
+       false,
+       true,
+       false,
+       false,
+       true,
+       false
+      ],
+      "loads": 4,
+      "swaps": 1,
+      "segments": 2,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": [1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "merit_vote": [1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "voted": true,
+      "ram_order": [0,6,1],
+      "tiers": {
+       "reads": 4,
+       "hits": 0,
+       "evictions": 1,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "begin_text",
+     "explore": false,
+     "state": {
+      "slots": [3,0,6,1],
+      "admitted": [],
+      "merited": [],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       false,
+       false,
+       false
+      ],
+      "last_seen": [2.0,1.0,0.0,1.0,0.0,0.0,1.0,0.0],
+      "admits": [1.0,1.0,0.0,1.0,0.0,0.0,1.0,0.0],
+      "ever": [
+       true,
+       true,
+       false,
+       true,
+       false,
+       false,
+       true,
+       false
+      ],
+      "loads": 4,
+      "swaps": 1,
+      "segments": 3,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": null,
+      "merit_vote": null,
+      "voted": false,
+      "ram_order": [0,6,1],
+      "tiers": {
+       "reads": 4,
+       "hits": 0,
+       "evictions": 1,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "admit",
+     "mass": [0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0],
+     "merit": null,
+     "returned_loads": 0,
+     "state": {
+      "slots": [3,0,6,1],
+      "admitted": [1],
+      "merited": [1],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       false,
+       false,
+       true
+      ],
+      "last_seen": [2.0,3.0,0.0,1.0,0.0,0.0,1.0,0.0],
+      "admits": [1.0,1.0,0.0,1.0,0.0,0.0,1.0,0.0],
+      "ever": [
+       true,
+       true,
+       false,
+       true,
+       false,
+       false,
+       true,
+       false
+      ],
+      "loads": 4,
+      "swaps": 1,
+      "segments": 3,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": [0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "merit_vote": [0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "voted": true,
+      "ram_order": [0,6,1],
+      "tiers": {
+       "reads": 4,
+       "hits": 0,
+       "evictions": 1,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "begin_text",
+     "explore": false,
+     "state": {
+      "slots": [3,0,6,1],
+      "admitted": [],
+      "merited": [],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       false,
+       false,
+       false
+      ],
+      "last_seen": [2.0,3.0,0.0,1.0,0.0,0.0,1.0,0.0],
+      "admits": [1.0,1.0,0.0,1.0,0.0,0.0,1.0,0.0],
+      "ever": [
+       true,
+       true,
+       false,
+       true,
+       false,
+       false,
+       true,
+       false
+      ],
+      "loads": 4,
+      "swaps": 1,
+      "segments": 4,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": null,
+      "merit_vote": null,
+      "voted": false,
+      "ram_order": [0,6,1],
+      "tiers": {
+       "reads": 4,
+       "hits": 0,
+       "evictions": 1,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "admit",
+     "mass": [0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0],
+     "merit": null,
+     "returned_loads": 1,
+     "state": {
+      "slots": [2,0,6,1],
+      "admitted": [2],
+      "merited": [2],
+      "admitting": true,
+      "admitted_mask": [
+       true,
+       false,
+       false,
+       false
+      ],
+      "last_seen": [2.0,3.0,4.0,1.0,0.0,0.0,1.0,0.0],
+      "admits": [1.0,1.0,1.0,1.0,0.0,0.0,1.0,0.0],
+      "ever": [
+       true,
+       true,
+       true,
+       true,
+       false,
+       false,
+       true,
+       false
+      ],
+      "loads": 5,
+      "swaps": 2,
+      "segments": 4,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": [0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0],
+      "merit_vote": [0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0],
+      "voted": true,
+      "ram_order": [6,1,2],
+      "tiers": {
+       "reads": 5,
+       "hits": 0,
+       "evictions": 2,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "begin_text",
+     "explore": false,
+     "state": {
+      "slots": [2,0,6,1],
+      "admitted": [],
+      "merited": [],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       false,
+       false,
+       false
+      ],
+      "last_seen": [2.0,3.0,4.0,1.0,0.0,0.0,1.0,0.0],
+      "admits": [1.0,1.0,1.0,1.0,0.0,0.0,1.0,0.0],
+      "ever": [
+       true,
+       true,
+       true,
+       true,
+       false,
+       false,
+       true,
+       false
+      ],
+      "loads": 5,
+      "swaps": 2,
+      "segments": 5,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": null,
+      "merit_vote": null,
+      "voted": false,
+      "ram_order": [6,1,2],
+      "tiers": {
+       "reads": 5,
+       "hits": 0,
+       "evictions": 2,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "admit",
+     "mass": [0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0],
+     "merit": null,
+     "returned_loads": 1,
+     "state": {
+      "slots": [2,0,3,1],
+      "admitted": [3],
+      "merited": [3],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       false,
+       true,
+       false
+      ],
+      "last_seen": [2.0,3.0,4.0,5.0,0.0,0.0,1.0,0.0],
+      "admits": [1.0,1.0,1.0,2.0,0.0,0.0,1.0,0.0],
+      "ever": [
+       true,
+       true,
+       true,
+       true,
+       false,
+       false,
+       true,
+       false
+      ],
+      "loads": 6,
+      "swaps": 3,
+      "segments": 5,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": [0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0],
+      "merit_vote": [0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0],
+      "voted": true,
+      "ram_order": [1,2,3],
+      "tiers": {
+       "reads": 6,
+       "hits": 0,
+       "evictions": 3,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "begin_text",
+     "explore": false,
+     "state": {
+      "slots": [2,0,3,1],
+      "admitted": [],
+      "merited": [],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       false,
+       false,
+       false
+      ],
+      "last_seen": [2.0,3.0,4.0,5.0,0.0,0.0,1.0,0.0],
+      "admits": [1.0,1.0,1.0,2.0,0.0,0.0,1.0,0.0],
+      "ever": [
+       true,
+       true,
+       true,
+       true,
+       false,
+       false,
+       true,
+       false
+      ],
+      "loads": 6,
+      "swaps": 3,
+      "segments": 6,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": null,
+      "merit_vote": null,
+      "voted": false,
+      "ram_order": [1,2,3],
+      "tiers": {
+       "reads": 6,
+       "hits": 0,
+       "evictions": 3,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "admit",
+     "mass": [0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0],
+     "merit": null,
+     "returned_loads": 1,
+     "state": {
+      "slots": [2,4,3,1],
+      "admitted": [4],
+      "merited": [4],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       true,
+       false,
+       false
+      ],
+      "last_seen": [2.0,3.0,4.0,5.0,6.0,0.0,1.0,0.0],
+      "admits": [1.0,1.0,1.0,2.0,1.0,0.0,1.0,0.0],
+      "ever": [
+       true,
+       true,
+       true,
+       true,
+       true,
+       false,
+       true,
+       false
+      ],
+      "loads": 7,
+      "swaps": 4,
+      "segments": 6,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": [0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0],
+      "merit_vote": [0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0],
+      "voted": true,
+      "ram_order": [2,3,4],
+      "tiers": {
+       "reads": 7,
+       "hits": 0,
+       "evictions": 4,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "begin_text",
+     "explore": false,
+     "state": {
+      "slots": [2,4,3,1],
+      "admitted": [],
+      "merited": [],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       false,
+       false,
+       false
+      ],
+      "last_seen": [2.0,3.0,4.0,5.0,6.0,0.0,1.0,0.0],
+      "admits": [1.0,1.0,1.0,2.0,1.0,0.0,1.0,0.0],
+      "ever": [
+       true,
+       true,
+       true,
+       true,
+       true,
+       false,
+       true,
+       false
+      ],
+      "loads": 7,
+      "swaps": 4,
+      "segments": 7,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": null,
+      "merit_vote": null,
+      "voted": false,
+      "ram_order": [2,3,4],
+      "tiers": {
+       "reads": 7,
+       "hits": 0,
+       "evictions": 4,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "admit",
+     "mass": [0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0],
+     "merit": null,
+     "returned_loads": 1,
+     "state": {
+      "slots": [2,4,3,5],
+      "admitted": [5],
+      "merited": [5],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       false,
+       false,
+       true
+      ],
+      "last_seen": [2.0,3.0,4.0,5.0,6.0,7.0,1.0,0.0],
+      "admits": [1.0,1.0,1.0,2.0,1.0,1.0,1.0,0.0],
+      "ever": [
+       true,
+       true,
+       true,
+       true,
+       true,
+       true,
+       true,
+       false
+      ],
+      "loads": 8,
+      "swaps": 5,
+      "segments": 7,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": [0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0],
+      "merit_vote": [0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0],
+      "voted": true,
+      "ram_order": [3,4,5],
+      "tiers": {
+       "reads": 8,
+       "hits": 0,
+       "evictions": 5,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "begin_text",
+     "explore": false,
+     "state": {
+      "slots": [2,4,3,5],
+      "admitted": [],
+      "merited": [],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       false,
+       false,
+       false
+      ],
+      "last_seen": [2.0,3.0,4.0,5.0,6.0,7.0,1.0,0.0],
+      "admits": [1.0,1.0,1.0,2.0,1.0,1.0,1.0,0.0],
+      "ever": [
+       true,
+       true,
+       true,
+       true,
+       true,
+       true,
+       true,
+       false
+      ],
+      "loads": 8,
+      "swaps": 5,
+      "segments": 8,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": null,
+      "merit_vote": null,
+      "voted": false,
+      "ram_order": [3,4,5],
+      "tiers": {
+       "reads": 8,
+       "hits": 0,
+       "evictions": 5,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "admit",
+     "mass": [0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0],
+     "merit": null,
+     "returned_loads": 1,
+     "state": {
+      "slots": [1,4,3,5],
+      "admitted": [1],
+      "merited": [1],
+      "admitting": true,
+      "admitted_mask": [
+       true,
+       false,
+       false,
+       false
+      ],
+      "last_seen": [2.0,8.0,4.0,5.0,6.0,7.0,1.0,0.0],
+      "admits": [1.0,2.0,1.0,2.0,1.0,1.0,1.0,0.0],
+      "ever": [
+       true,
+       true,
+       true,
+       true,
+       true,
+       true,
+       true,
+       false
+      ],
+      "loads": 9,
+      "swaps": 6,
+      "segments": 8,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": [0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "merit_vote": [0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "voted": true,
+      "ram_order": [4,5,1],
+      "tiers": {
+       "reads": 9,
+       "hits": 0,
+       "evictions": 6,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "begin_text",
+     "explore": false,
+     "state": {
+      "slots": [1,4,3,5],
+      "admitted": [],
+      "merited": [],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       false,
+       false,
+       false
+      ],
+      "last_seen": [2.0,8.0,4.0,5.0,6.0,7.0,1.0,0.0],
+      "admits": [1.0,2.0,1.0,2.0,1.0,1.0,1.0,0.0],
+      "ever": [
+       true,
+       true,
+       true,
+       true,
+       true,
+       true,
+       true,
+       false
+      ],
+      "loads": 9,
+      "swaps": 6,
+      "segments": 9,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": null,
+      "merit_vote": null,
+      "voted": false,
+      "ram_order": [4,5,1],
+      "tiers": {
+       "reads": 9,
+       "hits": 0,
+       "evictions": 6,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "admit",
+     "mass": [0.0,0.0,0.5,0.0,0.0,0.0,0.9,0.0],
+     "merit": null,
+     "returned_loads": 2,
+     "state": {
+      "slots": [1,2,6,5],
+      "admitted": [2,6],
+      "merited": [2,6],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       true,
+       true,
+       false
+      ],
+      "last_seen": [2.0,8.0,9.0,5.0,6.0,7.0,9.0,0.0],
+      "admits": [1.0,2.0,2.0,2.0,1.0,1.0,2.0,0.0],
+      "ever": [
+       true,
+       true,
+       true,
+       true,
+       true,
+       true,
+       true,
+       false
+      ],
+      "loads": 11,
+      "swaps": 7,
+      "segments": 9,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": [0.0,0.0,0.5,0.0,0.0,0.0,0.9,0.0],
+      "merit_vote": [0.0,0.0,0.5,0.0,0.0,0.0,0.9,0.0],
+      "voted": true,
+      "ram_order": [1,2,6],
+      "tiers": {
+       "reads": 11,
+       "hits": 0,
+       "evictions": 8,
+       "writebacks": 0
+      }
+     }
+    }
+   ]
+  },
+  {
+   "name": "empty_card_one_at_a_time",
+   "description": "Fresh pool, one expert per text: shows empty slots are used first (in slot order), last_seen/ever/admits bookkeeping and that re-admitting a resident expert costs no load.",
+   "config": {
+    "n_experts": 8,
+    "resident": 4,
+    "ram_capacity": 3,
+    "explore_bias": 0.65,
+    "explore_steps": 1000.0
+   },
+   "steps": [
+    {
+     "op": "init",
+     "state": {
+      "slots": [-1,-1,-1,-1],
+      "admitted": [],
+      "merited": [],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       false,
+       false,
+       false
+      ],
+      "last_seen": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "admits": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "ever": [
+       false,
+       false,
+       false,
+       false,
+       false,
+       false,
+       false,
+       false
+      ],
+      "loads": 0,
+      "swaps": 0,
+      "segments": 0,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": null,
+      "merit_vote": null,
+      "voted": false,
+      "ram_order": [],
+      "tiers": {
+       "reads": 0,
+       "hits": 0,
+       "evictions": 0,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "begin_text",
+     "explore": false,
+     "state": {
+      "slots": [-1,-1,-1,-1],
+      "admitted": [],
+      "merited": [],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       false,
+       false,
+       false
+      ],
+      "last_seen": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "admits": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "ever": [
+       false,
+       false,
+       false,
+       false,
+       false,
+       false,
+       false,
+       false
+      ],
+      "loads": 0,
+      "swaps": 0,
+      "segments": 1,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": null,
+      "merit_vote": null,
+      "voted": false,
+      "ram_order": [],
+      "tiers": {
+       "reads": 0,
+       "hits": 0,
+       "evictions": 0,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "admit",
+     "mass": [1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+     "merit": null,
+     "returned_loads": 1,
+     "state": {
+      "slots": [0,-1,-1,-1],
+      "admitted": [0],
+      "merited": [0],
+      "admitting": true,
+      "admitted_mask": [
+       true,
+       false,
+       false,
+       false
+      ],
+      "last_seen": [1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "admits": [1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "ever": [
+       true,
+       false,
+       false,
+       false,
+       false,
+       false,
+       false,
+       false
+      ],
+      "loads": 1,
+      "swaps": 1,
+      "segments": 1,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": [1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "merit_vote": [1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "voted": true,
+      "ram_order": [0],
+      "tiers": {
+       "reads": 1,
+       "hits": 0,
+       "evictions": 0,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "begin_text",
+     "explore": false,
+     "state": {
+      "slots": [0,-1,-1,-1],
+      "admitted": [],
+      "merited": [],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       false,
+       false,
+       false
+      ],
+      "last_seen": [1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "admits": [1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "ever": [
+       true,
+       false,
+       false,
+       false,
+       false,
+       false,
+       false,
+       false
+      ],
+      "loads": 1,
+      "swaps": 1,
+      "segments": 2,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": null,
+      "merit_vote": null,
+      "voted": false,
+      "ram_order": [0],
+      "tiers": {
+       "reads": 1,
+       "hits": 0,
+       "evictions": 0,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "admit",
+     "mass": [0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0],
+     "merit": null,
+     "returned_loads": 1,
+     "state": {
+      "slots": [0,1,-1,-1],
+      "admitted": [1],
+      "merited": [1],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       true,
+       false,
+       false
+      ],
+      "last_seen": [1.0,2.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "admits": [1.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "ever": [
+       true,
+       true,
+       false,
+       false,
+       false,
+       false,
+       false,
+       false
+      ],
+      "loads": 2,
+      "swaps": 2,
+      "segments": 2,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": [0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "merit_vote": [0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "voted": true,
+      "ram_order": [0,1],
+      "tiers": {
+       "reads": 2,
+       "hits": 0,
+       "evictions": 0,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "begin_text",
+     "explore": false,
+     "state": {
+      "slots": [0,1,-1,-1],
+      "admitted": [],
+      "merited": [],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       false,
+       false,
+       false
+      ],
+      "last_seen": [1.0,2.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "admits": [1.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "ever": [
+       true,
+       true,
+       false,
+       false,
+       false,
+       false,
+       false,
+       false
+      ],
+      "loads": 2,
+      "swaps": 2,
+      "segments": 3,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": null,
+      "merit_vote": null,
+      "voted": false,
+      "ram_order": [0,1],
+      "tiers": {
+       "reads": 2,
+       "hits": 0,
+       "evictions": 0,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "admit",
+     "mass": [0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0],
+     "merit": null,
+     "returned_loads": 1,
+     "state": {
+      "slots": [0,1,2,-1],
+      "admitted": [2],
+      "merited": [2],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       false,
+       true,
+       false
+      ],
+      "last_seen": [1.0,2.0,3.0,0.0,0.0,0.0,0.0,0.0],
+      "admits": [1.0,1.0,1.0,0.0,0.0,0.0,0.0,0.0],
+      "ever": [
+       true,
+       true,
+       true,
+       false,
+       false,
+       false,
+       false,
+       false
+      ],
+      "loads": 3,
+      "swaps": 3,
+      "segments": 3,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": [0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0],
+      "merit_vote": [0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0],
+      "voted": true,
+      "ram_order": [0,1,2],
+      "tiers": {
+       "reads": 3,
+       "hits": 0,
+       "evictions": 0,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "begin_text",
+     "explore": false,
+     "state": {
+      "slots": [0,1,2,-1],
+      "admitted": [],
+      "merited": [],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       false,
+       false,
+       false
+      ],
+      "last_seen": [1.0,2.0,3.0,0.0,0.0,0.0,0.0,0.0],
+      "admits": [1.0,1.0,1.0,0.0,0.0,0.0,0.0,0.0],
+      "ever": [
+       true,
+       true,
+       true,
+       false,
+       false,
+       false,
+       false,
+       false
+      ],
+      "loads": 3,
+      "swaps": 3,
+      "segments": 4,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": null,
+      "merit_vote": null,
+      "voted": false,
+      "ram_order": [0,1,2],
+      "tiers": {
+       "reads": 3,
+       "hits": 0,
+       "evictions": 0,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "admit",
+     "mass": [0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0],
+     "merit": null,
+     "returned_loads": 1,
+     "state": {
+      "slots": [0,1,2,3],
+      "admitted": [3],
+      "merited": [3],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       false,
+       false,
+       true
+      ],
+      "last_seen": [1.0,2.0,3.0,4.0,0.0,0.0,0.0,0.0],
+      "admits": [1.0,1.0,1.0,1.0,0.0,0.0,0.0,0.0],
+      "ever": [
+       true,
+       true,
+       true,
+       true,
+       false,
+       false,
+       false,
+       false
+      ],
+      "loads": 4,
+      "swaps": 4,
+      "segments": 4,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": [0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0],
+      "merit_vote": [0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0],
+      "voted": true,
+      "ram_order": [1,2,3],
+      "tiers": {
+       "reads": 4,
+       "hits": 0,
+       "evictions": 1,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "begin_text",
+     "explore": false,
+     "state": {
+      "slots": [0,1,2,3],
+      "admitted": [],
+      "merited": [],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       false,
+       false,
+       false
+      ],
+      "last_seen": [1.0,2.0,3.0,4.0,0.0,0.0,0.0,0.0],
+      "admits": [1.0,1.0,1.0,1.0,0.0,0.0,0.0,0.0],
+      "ever": [
+       true,
+       true,
+       true,
+       true,
+       false,
+       false,
+       false,
+       false
+      ],
+      "loads": 4,
+      "swaps": 4,
+      "segments": 5,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": null,
+      "merit_vote": null,
+      "voted": false,
+      "ram_order": [1,2,3],
+      "tiers": {
+       "reads": 4,
+       "hits": 0,
+       "evictions": 1,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "admit",
+     "mass": [0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0],
+     "merit": null,
+     "returned_loads": 0,
+     "state": {
+      "slots": [0,1,2,3],
+      "admitted": [2],
+      "merited": [2],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       false,
+       true,
+       false
+      ],
+      "last_seen": [1.0,2.0,5.0,4.0,0.0,0.0,0.0,0.0],
+      "admits": [1.0,1.0,1.0,1.0,0.0,0.0,0.0,0.0],
+      "ever": [
+       true,
+       true,
+       true,
+       true,
+       false,
+       false,
+       false,
+       false
+      ],
+      "loads": 4,
+      "swaps": 4,
+      "segments": 5,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": [0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0],
+      "merit_vote": [0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0],
+      "voted": true,
+      "ram_order": [1,2,3],
+      "tiers": {
+       "reads": 4,
+       "hits": 0,
+       "evictions": 1,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "begin_text",
+     "explore": false,
+     "state": {
+      "slots": [0,1,2,3],
+      "admitted": [],
+      "merited": [],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       false,
+       false,
+       false
+      ],
+      "last_seen": [1.0,2.0,5.0,4.0,0.0,0.0,0.0,0.0],
+      "admits": [1.0,1.0,1.0,1.0,0.0,0.0,0.0,0.0],
+      "ever": [
+       true,
+       true,
+       true,
+       true,
+       false,
+       false,
+       false,
+       false
+      ],
+      "loads": 4,
+      "swaps": 4,
+      "segments": 6,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": null,
+      "merit_vote": null,
+      "voted": false,
+      "ram_order": [1,2,3],
+      "tiers": {
+       "reads": 4,
+       "hits": 0,
+       "evictions": 1,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "admit",
+     "mass": [0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0],
+     "merit": null,
+     "returned_loads": 1,
+     "state": {
+      "slots": [4,1,2,3],
+      "admitted": [4],
+      "merited": [4],
+      "admitting": true,
+      "admitted_mask": [
+       true,
+       false,
+       false,
+       false
+      ],
+      "last_seen": [1.0,2.0,5.0,4.0,6.0,0.0,0.0,0.0],
+      "admits": [1.0,1.0,1.0,1.0,1.0,0.0,0.0,0.0],
+      "ever": [
+       true,
+       true,
+       true,
+       true,
+       true,
+       false,
+       false,
+       false
+      ],
+      "loads": 5,
+      "swaps": 5,
+      "segments": 6,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": [0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0],
+      "merit_vote": [0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0],
+      "voted": true,
+      "ram_order": [2,3,4],
+      "tiers": {
+       "reads": 5,
+       "hits": 0,
+       "evictions": 2,
+       "writebacks": 0
+      }
+     }
+    }
+   ]
+  },
+  {
+   "name": "later_pass_fills_room",
+   "description": "A sparse first pass leaves room; a later pass of the SAME forward admits more using only ITS OWN mass (the vote only includes each forward's first pass). A third pass on a full card does nothing. Then a new forward of the same text: its vote is first-pass-1 + first-pass-2.",
+   "config": {
+    "n_experts": 8,
+    "resident": 4,
+    "ram_capacity": 3,
+    "explore_bias": 0.65,
+    "explore_steps": 1000.0
+   },
+   "steps": [
+    {
+     "op": "init",
+     "state": {
+      "slots": [-1,-1,-1,-1],
+      "admitted": [],
+      "merited": [],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       false,
+       false,
+       false
+      ],
+      "last_seen": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "admits": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "ever": [
+       false,
+       false,
+       false,
+       false,
+       false,
+       false,
+       false,
+       false
+      ],
+      "loads": 0,
+      "swaps": 0,
+      "segments": 0,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": null,
+      "merit_vote": null,
+      "voted": false,
+      "ram_order": [],
+      "tiers": {
+       "reads": 0,
+       "hits": 0,
+       "evictions": 0,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "begin_text",
+     "explore": false,
+     "state": {
+      "slots": [-1,-1,-1,-1],
+      "admitted": [],
+      "merited": [],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       false,
+       false,
+       false
+      ],
+      "last_seen": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "admits": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "ever": [
+       false,
+       false,
+       false,
+       false,
+       false,
+       false,
+       false,
+       false
+      ],
+      "loads": 0,
+      "swaps": 0,
+      "segments": 1,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": null,
+      "merit_vote": null,
+      "voted": false,
+      "ram_order": [],
+      "tiers": {
+       "reads": 0,
+       "hits": 0,
+       "evictions": 0,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "admit",
+     "mass": [0.5,0.3,0.0,0.0,0.0,0.0,0.0,0.0],
+     "merit": null,
+     "returned_loads": 2,
+     "state": {
+      "slots": [0,1,-1,-1],
+      "admitted": [0,1],
+      "merited": [0,1],
+      "admitting": true,
+      "admitted_mask": [
+       true,
+       true,
+       false,
+       false
+      ],
+      "last_seen": [1.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "admits": [1.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "ever": [
+       true,
+       true,
+       false,
+       false,
+       false,
+       false,
+       false,
+       false
+      ],
+      "loads": 2,
+      "swaps": 1,
+      "segments": 1,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": [0.5,0.3,0.0,0.0,0.0,0.0,0.0,0.0],
+      "merit_vote": [0.5,0.3,0.0,0.0,0.0,0.0,0.0,0.0],
+      "voted": true,
+      "ram_order": [0,1],
+      "tiers": {
+       "reads": 2,
+       "hits": 0,
+       "evictions": 0,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "admit",
+     "mass": [0.2,0.0,0.4,0.0,0.0,0.9,0.0,0.0],
+     "merit": null,
+     "returned_loads": 2,
+     "state": {
+      "slots": [0,1,5,2],
+      "admitted": [0,1,2,5],
+      "merited": [0,1,2,5],
+      "admitting": false,
+      "admitted_mask": [
+       true,
+       true,
+       true,
+       true
+      ],
+      "last_seen": [1.0,1.0,1.0,0.0,0.0,1.0,0.0,0.0],
+      "admits": [1.0,1.0,1.0,0.0,0.0,1.0,0.0,0.0],
+      "ever": [
+       true,
+       true,
+       true,
+       false,
+       false,
+       true,
+       false,
+       false
+      ],
+      "loads": 4,
+      "swaps": 2,
+      "segments": 1,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": [0.5,0.3,0.0,0.0,0.0,0.0,0.0,0.0],
+      "merit_vote": [0.5,0.3,0.0,0.0,0.0,0.0,0.0,0.0],
+      "voted": true,
+      "ram_order": [1,5,2],
+      "tiers": {
+       "reads": 4,
+       "hits": 0,
+       "evictions": 1,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "admit",
+     "mass": [0.0,0.0,0.0,0.7,0.0,0.0,0.0,0.0],
+     "merit": null,
+     "returned_loads": 0,
+     "state": {
+      "slots": [0,1,5,2],
+      "admitted": [0,1,2,5],
+      "merited": [0,1,2,5],
+      "admitting": false,
+      "admitted_mask": [
+       true,
+       true,
+       true,
+       true
+      ],
+      "last_seen": [1.0,1.0,1.0,0.0,0.0,1.0,0.0,0.0],
+      "admits": [1.0,1.0,1.0,0.0,0.0,1.0,0.0,0.0],
+      "ever": [
+       true,
+       true,
+       true,
+       false,
+       false,
+       true,
+       false,
+       false
+      ],
+      "loads": 4,
+      "swaps": 2,
+      "segments": 1,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": [0.5,0.3,0.0,0.0,0.0,0.0,0.0,0.0],
+      "merit_vote": [0.5,0.3,0.0,0.0,0.0,0.0,0.0,0.0],
+      "voted": true,
+      "ram_order": [1,5,2],
+      "tiers": {
+       "reads": 4,
+       "hits": 0,
+       "evictions": 1,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "begin_forward",
+     "explore": false,
+     "state": {
+      "slots": [0,1,5,2],
+      "admitted": [],
+      "merited": [],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       false,
+       false,
+       false
+      ],
+      "last_seen": [1.0,1.0,1.0,0.0,0.0,1.0,0.0,0.0],
+      "admits": [1.0,1.0,1.0,0.0,0.0,1.0,0.0,0.0],
+      "ever": [
+       true,
+       true,
+       true,
+       false,
+       false,
+       true,
+       false,
+       false
+      ],
+      "loads": 4,
+      "swaps": 2,
+      "segments": 1,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": [0.5,0.3,0.0,0.0,0.0,0.0,0.0,0.0],
+      "merit_vote": [0.5,0.3,0.0,0.0,0.0,0.0,0.0,0.0],
+      "voted": false,
+      "ram_order": [1,5,2],
+      "tiers": {
+       "reads": 4,
+       "hits": 0,
+       "evictions": 1,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "admit",
+     "mass": [0.0,0.0,0.0,0.6,0.0,0.0,0.8,0.0],
+     "merit": null,
+     "returned_loads": 2,
+     "state": {
+      "slots": [0,1,6,3],
+      "admitted": [0,1,3,6],
+      "merited": [0,1,3,6],
+      "admitting": false,
+      "admitted_mask": [
+       true,
+       true,
+       true,
+       true
+      ],
+      "last_seen": [1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0],
+      "admits": [1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0],
+      "ever": [
+       true,
+       true,
+       true,
+       true,
+       false,
+       true,
+       true,
+       false
+      ],
+      "loads": 6,
+      "swaps": 3,
+      "segments": 1,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": [0.5,0.3,0.0,0.6,0.0,0.0,0.8,0.0],
+      "merit_vote": [0.5,0.3,0.0,0.6,0.0,0.0,0.8,0.0],
+      "voted": true,
+      "ram_order": [2,6,3],
+      "tiers": {
+       "reads": 6,
+       "hits": 0,
+       "evictions": 3,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "admit",
+     "mass": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+     "merit": null,
+     "returned_loads": 0,
+     "state": {
+      "slots": [0,1,6,3],
+      "admitted": [0,1,3,6],
+      "merited": [0,1,3,6],
+      "admitting": false,
+      "admitted_mask": [
+       true,
+       true,
+       true,
+       true
+      ],
+      "last_seen": [1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0],
+      "admits": [1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0],
+      "ever": [
+       true,
+       true,
+       true,
+       true,
+       false,
+       true,
+       true,
+       false
+      ],
+      "loads": 6,
+      "swaps": 3,
+      "segments": 1,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": [0.5,0.3,0.0,0.6,0.0,0.0,0.8,0.0],
+      "merit_vote": [0.5,0.3,0.0,0.6,0.0,0.0,0.8,0.0],
+      "voted": true,
+      "ram_order": [2,6,3],
+      "tiers": {
+       "reads": 6,
+       "hits": 0,
+       "evictions": 3,
+       "writebacks": 0
+      }
+     }
+    }
+   ]
+  },
+  {
+   "name": "text_vote_accumulation",
+   "description": "Several forwards of one text: each forward is admitted by the accumulated vote of all first passes so far, not by its own mass. Forward 2 prefers e4..e7 but the vote still favours e0..e3 (no load); forward 3 tips the vote and swaps all four. A new text (begin_text) clears the vote.",
+   "config": {
+    "n_experts": 8,
+    "resident": 4,
+    "ram_capacity": 3,
+    "explore_bias": 0.65,
+    "explore_steps": 1000.0
+   },
+   "steps": [
+    {
+     "op": "init",
+     "state": {
+      "slots": [-1,-1,-1,-1],
+      "admitted": [],
+      "merited": [],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       false,
+       false,
+       false
+      ],
+      "last_seen": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "admits": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "ever": [
+       false,
+       false,
+       false,
+       false,
+       false,
+       false,
+       false,
+       false
+      ],
+      "loads": 0,
+      "swaps": 0,
+      "segments": 0,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": null,
+      "merit_vote": null,
+      "voted": false,
+      "ram_order": [],
+      "tiers": {
+       "reads": 0,
+       "hits": 0,
+       "evictions": 0,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "begin_text",
+     "explore": false,
+     "state": {
+      "slots": [-1,-1,-1,-1],
+      "admitted": [],
+      "merited": [],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       false,
+       false,
+       false
+      ],
+      "last_seen": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "admits": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "ever": [
+       false,
+       false,
+       false,
+       false,
+       false,
+       false,
+       false,
+       false
+      ],
+      "loads": 0,
+      "swaps": 0,
+      "segments": 1,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": null,
+      "merit_vote": null,
+      "voted": false,
+      "ram_order": [],
+      "tiers": {
+       "reads": 0,
+       "hits": 0,
+       "evictions": 0,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "admit",
+     "mass": [3.0,2.9,2.8,2.7,0.0,0.0,0.0,0.0],
+     "merit": null,
+     "returned_loads": 4,
+     "state": {
+      "slots": [0,1,2,3],
+      "admitted": [0,1,2,3],
+      "merited": [0,1,2,3],
+      "admitting": false,
+      "admitted_mask": [
+       true,
+       true,
+       true,
+       true
+      ],
+      "last_seen": [1.0,1.0,1.0,1.0,0.0,0.0,0.0,0.0],
+      "admits": [1.0,1.0,1.0,1.0,0.0,0.0,0.0,0.0],
+      "ever": [
+       true,
+       true,
+       true,
+       true,
+       false,
+       false,
+       false,
+       false
+      ],
+      "loads": 4,
+      "swaps": 1,
+      "segments": 1,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": [3.0,2.9,2.8,2.7,0.0,0.0,0.0,0.0],
+      "merit_vote": [3.0,2.9,2.8,2.7,0.0,0.0,0.0,0.0],
+      "voted": true,
+      "ram_order": [1,2,3],
+      "tiers": {
+       "reads": 4,
+       "hits": 0,
+       "evictions": 1,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "begin_forward",
+     "explore": false,
+     "state": {
+      "slots": [0,1,2,3],
+      "admitted": [],
+      "merited": [],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       false,
+       false,
+       false
+      ],
+      "last_seen": [1.0,1.0,1.0,1.0,0.0,0.0,0.0,0.0],
+      "admits": [1.0,1.0,1.0,1.0,0.0,0.0,0.0,0.0],
+      "ever": [
+       true,
+       true,
+       true,
+       true,
+       false,
+       false,
+       false,
+       false
+      ],
+      "loads": 4,
+      "swaps": 1,
+      "segments": 1,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": [3.0,2.9,2.8,2.7,0.0,0.0,0.0,0.0],
+      "merit_vote": [3.0,2.9,2.8,2.7,0.0,0.0,0.0,0.0],
+      "voted": false,
+      "ram_order": [1,2,3],
+      "tiers": {
+       "reads": 4,
+       "hits": 0,
+       "evictions": 1,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "admit",
+     "mass": [0.0,0.0,0.0,0.0,2.0,1.9,1.8,1.7],
+     "merit": null,
+     "returned_loads": 0,
+     "state": {
+      "slots": [0,1,2,3],
+      "admitted": [0,1,2,3],
+      "merited": [0,1,2,3],
+      "admitting": false,
+      "admitted_mask": [
+       true,
+       true,
+       true,
+       true
+      ],
+      "last_seen": [1.0,1.0,1.0,1.0,0.0,0.0,0.0,0.0],
+      "admits": [1.0,1.0,1.0,1.0,0.0,0.0,0.0,0.0],
+      "ever": [
+       true,
+       true,
+       true,
+       true,
+       false,
+       false,
+       false,
+       false
+      ],
+      "loads": 4,
+      "swaps": 1,
+      "segments": 1,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": [3.0,2.9,2.8,2.7,2.0,1.9,1.8,1.7],
+      "merit_vote": [3.0,2.9,2.8,2.7,2.0,1.9,1.8,1.7],
+      "voted": true,
+      "ram_order": [1,2,3],
+      "tiers": {
+       "reads": 4,
+       "hits": 0,
+       "evictions": 1,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "begin_forward",
+     "explore": false,
+     "state": {
+      "slots": [0,1,2,3],
+      "admitted": [],
+      "merited": [],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       false,
+       false,
+       false
+      ],
+      "last_seen": [1.0,1.0,1.0,1.0,0.0,0.0,0.0,0.0],
+      "admits": [1.0,1.0,1.0,1.0,0.0,0.0,0.0,0.0],
+      "ever": [
+       true,
+       true,
+       true,
+       true,
+       false,
+       false,
+       false,
+       false
+      ],
+      "loads": 4,
+      "swaps": 1,
+      "segments": 1,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": [3.0,2.9,2.8,2.7,2.0,1.9,1.8,1.7],
+      "merit_vote": [3.0,2.9,2.8,2.7,2.0,1.9,1.8,1.7],
+      "voted": false,
+      "ram_order": [1,2,3],
+      "tiers": {
+       "reads": 4,
+       "hits": 0,
+       "evictions": 1,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "admit",
+     "mass": [0.0,0.0,0.0,0.0,2.0,1.9,1.8,1.7],
+     "merit": null,
+     "returned_loads": 4,
+     "state": {
+      "slots": [4,5,6,7],
+      "admitted": [4,5,6,7],
+      "merited": [4,5,6,7],
+      "admitting": false,
+      "admitted_mask": [
+       true,
+       true,
+       true,
+       true
+      ],
+      "last_seen": [1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0],
+      "admits": [1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0],
+      "ever": [
+       true,
+       true,
+       true,
+       true,
+       true,
+       true,
+       true,
+       true
+      ],
+      "loads": 8,
+      "swaps": 2,
+      "segments": 1,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": [3.0,2.9,2.8,2.7,4.0,3.8,3.6,3.4],
+      "merit_vote": [3.0,2.9,2.8,2.7,4.0,3.8,3.6,3.4],
+      "voted": true,
+      "ram_order": [5,6,7],
+      "tiers": {
+       "reads": 8,
+       "hits": 0,
+       "evictions": 5,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "begin_text",
+     "explore": false,
+     "state": {
+      "slots": [4,5,6,7],
+      "admitted": [],
+      "merited": [],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       false,
+       false,
+       false
+      ],
+      "last_seen": [1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0],
+      "admits": [1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0],
+      "ever": [
+       true,
+       true,
+       true,
+       true,
+       true,
+       true,
+       true,
+       true
+      ],
+      "loads": 8,
+      "swaps": 2,
+      "segments": 2,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": null,
+      "merit_vote": null,
+      "voted": false,
+      "ram_order": [5,6,7],
+      "tiers": {
+       "reads": 8,
+       "hits": 0,
+       "evictions": 5,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "admit",
+     "mass": [0.0,0.0,0.0,0.5,0.0,0.0,0.0,0.3],
+     "merit": null,
+     "returned_loads": 1,
+     "state": {
+      "slots": [3,5,6,7],
+      "admitted": [3,7],
+      "merited": [3,7],
+      "admitting": true,
+      "admitted_mask": [
+       true,
+       false,
+       false,
+       true
+      ],
+      "last_seen": [1.0,1.0,1.0,2.0,1.0,1.0,1.0,2.0],
+      "admits": [1.0,1.0,1.0,2.0,1.0,1.0,1.0,1.0],
+      "ever": [
+       true,
+       true,
+       true,
+       true,
+       true,
+       true,
+       true,
+       true
+      ],
+      "loads": 9,
+      "swaps": 3,
+      "segments": 2,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": [0.0,0.0,0.0,0.5,0.0,0.0,0.0,0.3],
+      "merit_vote": [0.0,0.0,0.0,0.5,0.0,0.0,0.0,0.3],
+      "voted": true,
+      "ram_order": [6,7,3],
+      "tiers": {
+       "reads": 9,
+       "hits": 0,
+       "evictions": 6,
+       "writebacks": 0
+      }
+     }
+    }
+   ]
+  },
+  {
+   "name": "exploration_config_values",
+   "description": "explore_bias 0.65, explore_steps 1000 (config.yaml). bias = 0.65*exp(-recent/fair), fair = resident/n = 0.5, computed from `recent` BEFORE it decays by (1-1/1000). admit(mass, merit): the card follows `mass` (router + bonus), the prune clock (last_seen) follows `merit` (router alone). recent += 1/explore_steps for every expert added to the forward's admitted set (resident or not). explore=False leaves recent and bias alone; explore_bias 0 disables exploration even when explore=True.",
+   "config": {
+    "n_experts": 8,
+    "resident": 4,
+    "ram_capacity": 3,
+    "explore_bias": 0.65,
+    "explore_steps": 1000.0
+   },
+   "steps": [
+    {
+     "op": "init",
+     "state": {
+      "slots": [-1,-1,-1,-1],
+      "admitted": [],
+      "merited": [],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       false,
+       false,
+       false
+      ],
+      "last_seen": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "admits": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "ever": [
+       false,
+       false,
+       false,
+       false,
+       false,
+       false,
+       false,
+       false
+      ],
+      "loads": 0,
+      "swaps": 0,
+      "segments": 0,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": null,
+      "merit_vote": null,
+      "voted": false,
+      "ram_order": [],
+      "tiers": {
+       "reads": 0,
+       "hits": 0,
+       "evictions": 0,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "begin_text",
+     "explore": true,
+     "state": {
+      "slots": [-1,-1,-1,-1],
+      "admitted": [],
+      "merited": [],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       false,
+       false,
+       false
+      ],
+      "last_seen": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "admits": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "ever": [
+       false,
+       false,
+       false,
+       false,
+       false,
+       false,
+       false,
+       false
+      ],
+      "loads": 0,
+      "swaps": 0,
+      "segments": 1,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": [0.65,0.65,0.65,0.65,0.65,0.65,0.65,0.65],
+      "exploring": true,
+      "vote": null,
+      "merit_vote": null,
+      "voted": false,
+      "ram_order": [],
+      "tiers": {
+       "reads": 0,
+       "hits": 0,
+       "evictions": 0,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "admit",
+     "mass": [0.21,0.11,0.0,0.63,0.52,0.41,0.33,0.0],
+     "merit": [0.91,0.82,0.73,0.14,0.0,0.0,0.0,0.0],
+     "returned_loads": 4,
+     "state": {
+      "slots": [3,4,5,6],
+      "admitted": [3,4,5,6],
+      "merited": [0,1,2,3],
+      "admitting": false,
+      "admitted_mask": [
+       true,
+       true,
+       true,
+       true
+      ],
+      "last_seen": [1.0,1.0,1.0,1.0,0.0,0.0,0.0,0.0],
+      "admits": [0.0,0.0,0.0,1.0,1.0,1.0,1.0,0.0],
+      "ever": [
+       false,
+       false,
+       false,
+       true,
+       true,
+       true,
+       true,
+       false
+      ],
+      "loads": 4,
+      "swaps": 1,
+      "segments": 1,
+      "recent": [0.0,0.0,0.0,0.001,0.001,0.001,0.001,0.0],
+      "bias": [0.65,0.65,0.65,0.65,0.65,0.65,0.65,0.65],
+      "exploring": true,
+      "vote": [0.21,0.11,0.0,0.63,0.52,0.41,0.33,0.0],
+      "merit_vote": [0.91,0.82,0.73,0.14,0.0,0.0,0.0,0.0],
+      "voted": true,
+      "ram_order": [4,5,6],
+      "tiers": {
+       "reads": 4,
+       "hits": 0,
+       "evictions": 1,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "begin_forward",
+     "explore": true,
+     "state": {
+      "slots": [3,4,5,6],
+      "admitted": [],
+      "merited": [],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       false,
+       false,
+       false
+      ],
+      "last_seen": [1.0,1.0,1.0,1.0,0.0,0.0,0.0,0.0],
+      "admits": [0.0,0.0,0.0,1.0,1.0,1.0,1.0,0.0],
+      "ever": [
+       false,
+       false,
+       false,
+       true,
+       true,
+       true,
+       true,
+       false
+      ],
+      "loads": 4,
+      "swaps": 1,
+      "segments": 1,
+      "recent": [0.0,0.0,0.0,0.000999,0.000999,0.000999,0.000999,0.0],
+      "bias": [0.65,0.65,0.65,0.64870125,0.64870125,0.64870125,0.64870125,0.65],
+      "exploring": true,
+      "vote": [0.21,0.11,0.0,0.63,0.52,0.41,0.33,0.0],
+      "merit_vote": [0.91,0.82,0.73,0.14,0.0,0.0,0.0,0.0],
+      "voted": false,
+      "ram_order": [4,5,6],
+      "tiers": {
+       "reads": 4,
+       "hits": 0,
+       "evictions": 1,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "admit",
+     "mass": [0.0,0.0,0.0,0.32,0.62,0.53,0.12,0.24],
+     "merit": [0.52,0.0,0.43,0.34,0.15,0.0,0.0,0.0],
+     "returned_loads": 0,
+     "state": {
+      "slots": [3,4,5,6],
+      "admitted": [3,4,5,6],
+      "merited": [0,1,2,3],
+      "admitting": false,
+      "admitted_mask": [
+       true,
+       true,
+       true,
+       true
+      ],
+      "last_seen": [1.0,1.0,1.0,1.0,0.0,0.0,0.0,0.0],
+      "admits": [0.0,0.0,0.0,1.0,1.0,1.0,1.0,0.0],
+      "ever": [
+       false,
+       false,
+       false,
+       true,
+       true,
+       true,
+       true,
+       false
+      ],
+      "loads": 4,
+      "swaps": 1,
+      "segments": 1,
+      "recent": [0.0,0.0,0.0,0.001999,0.001999,0.001999,0.001999,0.0],
+      "bias": [0.65,0.65,0.65,0.64870125,0.64870125,0.64870125,0.64870125,0.65],
+      "exploring": true,
+      "vote": [0.21,0.11,0.0,0.95,1.14,0.93999994,0.45000002,0.24],
+      "merit_vote": [1.4300001,0.82,1.1600001,0.48000002,0.15,0.0,0.0,0.0],
+      "voted": true,
+      "ram_order": [4,5,6],
+      "tiers": {
+       "reads": 4,
+       "hits": 0,
+       "evictions": 1,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "set_recent",
+     "values": [0.0,0.3,0.6,0.1,0.9,0.0,0.5,0.2],
+     "state": {
+      "slots": [3,4,5,6],
+      "admitted": [3,4,5,6],
+      "merited": [0,1,2,3],
+      "admitting": false,
+      "admitted_mask": [
+       true,
+       true,
+       true,
+       true
+      ],
+      "last_seen": [1.0,1.0,1.0,1.0,0.0,0.0,0.0,0.0],
+      "admits": [0.0,0.0,0.0,1.0,1.0,1.0,1.0,0.0],
+      "ever": [
+       false,
+       false,
+       false,
+       true,
+       true,
+       true,
+       true,
+       false
+      ],
+      "loads": 4,
+      "swaps": 1,
+      "segments": 1,
+      "recent": [0.0,0.3,0.6,0.1,0.9,0.0,0.5,0.2],
+      "bias": [0.65,0.65,0.65,0.64870125,0.64870125,0.64870125,0.64870125,0.65],
+      "exploring": true,
+      "vote": [0.21,0.11,0.0,0.95,1.14,0.93999994,0.45000002,0.24],
+      "merit_vote": [1.4300001,0.82,1.1600001,0.48000002,0.15,0.0,0.0,0.0],
+      "voted": true,
+      "ram_order": [4,5,6],
+      "tiers": {
+       "reads": 4,
+       "hits": 0,
+       "evictions": 1,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "begin_forward",
+     "explore": true,
+     "state": {
+      "slots": [3,4,5,6],
+      "admitted": [],
+      "merited": [],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       false,
+       false,
+       false
+      ],
+      "last_seen": [1.0,1.0,1.0,1.0,0.0,0.0,0.0,0.0],
+      "admits": [0.0,0.0,0.0,1.0,1.0,1.0,1.0,0.0],
+      "ever": [
+       false,
+       false,
+       false,
+       true,
+       true,
+       true,
+       true,
+       false
+      ],
+      "loads": 4,
+      "swaps": 1,
+      "segments": 1,
+      "recent": [0.0,0.29970002,0.59940004,0.0999,0.8991,0.0,0.4995,0.1998],
+      "bias": [0.65,0.35672754,0.19577622,0.532175,0.10744428,0.65,0.23912163,0.43570802],
+      "exploring": true,
+      "vote": [0.21,0.11,0.0,0.95,1.14,0.93999994,0.45000002,0.24],
+      "merit_vote": [1.4300001,0.82,1.1600001,0.48000002,0.15,0.0,0.0,0.0],
+      "voted": false,
+      "ram_order": [4,5,6],
+      "tiers": {
+       "reads": 4,
+       "hits": 0,
+       "evictions": 1,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "admit",
+     "mass": [0.95,0.0,0.0,0.0,0.0,0.63,0.57,0.41],
+     "merit": [0.0,0.0,0.0,0.93,0.0,0.11,0.0,0.22],
+     "returned_loads": 1,
+     "state": {
+      "slots": [0,4,5,6],
+      "admitted": [0,4,5,6],
+      "merited": [0,1,2,3],
+      "admitting": false,
+      "admitted_mask": [
+       true,
+       true,
+       true,
+       true
+      ],
+      "last_seen": [1.0,1.0,1.0,1.0,0.0,0.0,0.0,0.0],
+      "admits": [1.0,0.0,0.0,1.0,1.0,1.0,1.0,0.0],
+      "ever": [
+       true,
+       false,
+       false,
+       true,
+       true,
+       true,
+       true,
+       false
+      ],
+      "loads": 5,
+      "swaps": 2,
+      "segments": 1,
+      "recent": [0.001,0.29970002,0.59940004,0.0999,0.9001,0.001,0.5005,0.1998],
+      "bias": [0.65,0.35672754,0.19577622,0.532175,0.10744428,0.65,0.23912163,0.43570802],
+      "exploring": true,
+      "vote": [1.16,0.11,0.0,0.95,1.14,1.5699999,1.02,0.65],
+      "merit_vote": [1.4300001,0.82,1.1600001,1.4100001,0.15,0.11,0.0,0.22],
+      "voted": true,
+      "ram_order": [5,6,0],
+      "tiers": {
+       "reads": 5,
+       "hits": 0,
+       "evictions": 2,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "begin_text",
+     "explore": false,
+     "state": {
+      "slots": [0,4,5,6],
+      "admitted": [],
+      "merited": [],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       false,
+       false,
+       false
+      ],
+      "last_seen": [1.0,1.0,1.0,1.0,0.0,0.0,0.0,0.0],
+      "admits": [1.0,0.0,0.0,1.0,1.0,1.0,1.0,0.0],
+      "ever": [
+       true,
+       false,
+       false,
+       true,
+       true,
+       true,
+       true,
+       false
+      ],
+      "loads": 5,
+      "swaps": 2,
+      "segments": 2,
+      "recent": [0.001,0.29970002,0.59940004,0.0999,0.9001,0.001,0.5005,0.1998],
+      "bias": null,
+      "exploring": false,
+      "vote": null,
+      "merit_vote": null,
+      "voted": false,
+      "ram_order": [5,6,0],
+      "tiers": {
+       "reads": 5,
+       "hits": 0,
+       "evictions": 2,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "admit",
+     "mass": [0.0,0.0,0.1,0.0,0.0,0.0,0.0,0.9],
+     "merit": null,
+     "returned_loads": 2,
+     "state": {
+      "slots": [0,7,2,6],
+      "admitted": [2,7],
+      "merited": [2,7],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       true,
+       true,
+       false
+      ],
+      "last_seen": [1.0,1.0,2.0,1.0,0.0,0.0,0.0,2.0],
+      "admits": [1.0,0.0,1.0,1.0,1.0,1.0,1.0,1.0],
+      "ever": [
+       true,
+       false,
+       true,
+       true,
+       true,
+       true,
+       true,
+       true
+      ],
+      "loads": 7,
+      "swaps": 3,
+      "segments": 2,
+      "recent": [0.001,0.29970002,0.59940004,0.0999,0.9001,0.001,0.5005,0.1998],
+      "bias": null,
+      "exploring": false,
+      "vote": [0.0,0.0,0.1,0.0,0.0,0.0,0.0,0.9],
+      "merit_vote": [0.0,0.0,0.1,0.0,0.0,0.0,0.0,0.9],
+      "voted": true,
+      "ram_order": [0,7,2],
+      "tiers": {
+       "reads": 7,
+       "hits": 0,
+       "evictions": 4,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "set_explore",
+     "explore_bias": 0.0,
+     "explore_steps": 1000.0,
+     "state": {
+      "slots": [0,7,2,6],
+      "admitted": [2,7],
+      "merited": [2,7],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       true,
+       true,
+       false
+      ],
+      "last_seen": [1.0,1.0,2.0,1.0,0.0,0.0,0.0,2.0],
+      "admits": [1.0,0.0,1.0,1.0,1.0,1.0,1.0,1.0],
+      "ever": [
+       true,
+       false,
+       true,
+       true,
+       true,
+       true,
+       true,
+       true
+      ],
+      "loads": 7,
+      "swaps": 3,
+      "segments": 2,
+      "recent": [0.001,0.29970002,0.59940004,0.0999,0.9001,0.001,0.5005,0.1998],
+      "bias": null,
+      "exploring": false,
+      "vote": [0.0,0.0,0.1,0.0,0.0,0.0,0.0,0.9],
+      "merit_vote": [0.0,0.0,0.1,0.0,0.0,0.0,0.0,0.9],
+      "voted": true,
+      "ram_order": [0,7,2],
+      "tiers": {
+       "reads": 7,
+       "hits": 0,
+       "evictions": 4,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "begin_text",
+     "explore": true,
+     "state": {
+      "slots": [0,7,2,6],
+      "admitted": [],
+      "merited": [],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       false,
+       false,
+       false
+      ],
+      "last_seen": [1.0,1.0,2.0,1.0,0.0,0.0,0.0,2.0],
+      "admits": [1.0,0.0,1.0,1.0,1.0,1.0,1.0,1.0],
+      "ever": [
+       true,
+       false,
+       true,
+       true,
+       true,
+       true,
+       true,
+       true
+      ],
+      "loads": 7,
+      "swaps": 3,
+      "segments": 3,
+      "recent": [0.001,0.29970002,0.59940004,0.0999,0.9001,0.001,0.5005,0.1998],
+      "bias": null,
+      "exploring": false,
+      "vote": null,
+      "merit_vote": null,
+      "voted": false,
+      "ram_order": [0,7,2],
+      "tiers": {
+       "reads": 7,
+       "hits": 0,
+       "evictions": 4,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "admit",
+     "mass": [0.0,0.2,0.0,0.0,0.0,0.0,0.0,0.9],
+     "merit": null,
+     "returned_loads": 1,
+     "state": {
+      "slots": [0,7,2,1],
+      "admitted": [1,7],
+      "merited": [1,7],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       true,
+       false,
+       true
+      ],
+      "last_seen": [1.0,3.0,2.0,1.0,0.0,0.0,0.0,3.0],
+      "admits": [1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0],
+      "ever": [
+       true,
+       true,
+       true,
+       true,
+       true,
+       true,
+       true,
+       true
+      ],
+      "loads": 8,
+      "swaps": 4,
+      "segments": 3,
+      "recent": [0.001,0.29970002,0.59940004,0.0999,0.9001,0.001,0.5005,0.1998],
+      "bias": null,
+      "exploring": false,
+      "vote": [0.0,0.2,0.0,0.0,0.0,0.0,0.0,0.9],
+      "merit_vote": [0.0,0.2,0.0,0.0,0.0,0.0,0.0,0.9],
+      "voted": true,
+      "ram_order": [7,2,1],
+      "tiers": {
+       "reads": 8,
+       "hits": 0,
+       "evictions": 5,
+       "writebacks": 0
+      }
+     }
+    }
+   ]
+  },
+  {
+   "name": "exploration_fast_decay",
+   "description": "explore_bias 0.65 with explore_steps 8 so `recent` moves visibly: +0.125 per admission to the forward's admitted set, x0.875 per exploring forward.",
+   "config": {
+    "n_experts": 8,
+    "resident": 4,
+    "ram_capacity": 3,
+    "explore_bias": 0.65,
+    "explore_steps": 8.0
+   },
+   "steps": [
+    {
+     "op": "init",
+     "state": {
+      "slots": [-1,-1,-1,-1],
+      "admitted": [],
+      "merited": [],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       false,
+       false,
+       false
+      ],
+      "last_seen": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "admits": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "ever": [
+       false,
+       false,
+       false,
+       false,
+       false,
+       false,
+       false,
+       false
+      ],
+      "loads": 0,
+      "swaps": 0,
+      "segments": 0,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": null,
+      "exploring": false,
+      "vote": null,
+      "merit_vote": null,
+      "voted": false,
+      "ram_order": [],
+      "tiers": {
+       "reads": 0,
+       "hits": 0,
+       "evictions": 0,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "begin_text",
+     "explore": true,
+     "state": {
+      "slots": [-1,-1,-1,-1],
+      "admitted": [],
+      "merited": [],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       false,
+       false,
+       false
+      ],
+      "last_seen": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "admits": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "ever": [
+       false,
+       false,
+       false,
+       false,
+       false,
+       false,
+       false,
+       false
+      ],
+      "loads": 0,
+      "swaps": 0,
+      "segments": 1,
+      "recent": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+      "bias": [0.65,0.65,0.65,0.65,0.65,0.65,0.65,0.65],
+      "exploring": true,
+      "vote": null,
+      "merit_vote": null,
+      "voted": false,
+      "ram_order": [],
+      "tiers": {
+       "reads": 0,
+       "hits": 0,
+       "evictions": 0,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "admit",
+     "mass": [0.9,0.8,0.7,0.6,0.0,0.0,0.0,0.0],
+     "merit": null,
+     "returned_loads": 4,
+     "state": {
+      "slots": [0,1,2,3],
+      "admitted": [0,1,2,3],
+      "merited": [0,1,2,3],
+      "admitting": false,
+      "admitted_mask": [
+       true,
+       true,
+       true,
+       true
+      ],
+      "last_seen": [1.0,1.0,1.0,1.0,0.0,0.0,0.0,0.0],
+      "admits": [1.0,1.0,1.0,1.0,0.0,0.0,0.0,0.0],
+      "ever": [
+       true,
+       true,
+       true,
+       true,
+       false,
+       false,
+       false,
+       false
+      ],
+      "loads": 4,
+      "swaps": 1,
+      "segments": 1,
+      "recent": [0.125,0.125,0.125,0.125,0.0,0.0,0.0,0.0],
+      "bias": [0.65,0.65,0.65,0.65,0.65,0.65,0.65,0.65],
+      "exploring": true,
+      "vote": [0.9,0.8,0.7,0.6,0.0,0.0,0.0,0.0],
+      "merit_vote": [0.9,0.8,0.7,0.6,0.0,0.0,0.0,0.0],
+      "voted": true,
+      "ram_order": [1,2,3],
+      "tiers": {
+       "reads": 4,
+       "hits": 0,
+       "evictions": 1,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "begin_text",
+     "explore": true,
+     "state": {
+      "slots": [0,1,2,3],
+      "admitted": [],
+      "merited": [],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       false,
+       false,
+       false
+      ],
+      "last_seen": [1.0,1.0,1.0,1.0,0.0,0.0,0.0,0.0],
+      "admits": [1.0,1.0,1.0,1.0,0.0,0.0,0.0,0.0],
+      "ever": [
+       true,
+       true,
+       true,
+       true,
+       false,
+       false,
+       false,
+       false
+      ],
+      "loads": 4,
+      "swaps": 1,
+      "segments": 2,
+      "recent": [0.109375,0.109375,0.109375,0.109375,0.0,0.0,0.0,0.0],
+      "bias": [0.5062205,0.5062205,0.5062205,0.5062205,0.65,0.65,0.65,0.65],
+      "exploring": true,
+      "vote": null,
+      "merit_vote": null,
+      "voted": false,
+      "ram_order": [1,2,3],
+      "tiers": {
+       "reads": 4,
+       "hits": 0,
+       "evictions": 1,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "admit",
+     "mass": [0.9,0.0,0.0,0.6,0.8,0.7,0.0,0.0],
+     "merit": null,
+     "returned_loads": 2,
+     "state": {
+      "slots": [0,4,5,3],
+      "admitted": [0,3,4,5],
+      "merited": [0,3,4,5],
+      "admitting": false,
+      "admitted_mask": [
+       true,
+       true,
+       true,
+       true
+      ],
+      "last_seen": [2.0,1.0,1.0,2.0,2.0,2.0,0.0,0.0],
+      "admits": [1.0,1.0,1.0,1.0,1.0,1.0,0.0,0.0],
+      "ever": [
+       true,
+       true,
+       true,
+       true,
+       true,
+       true,
+       false,
+       false
+      ],
+      "loads": 6,
+      "swaps": 2,
+      "segments": 2,
+      "recent": [0.234375,0.109375,0.109375,0.234375,0.125,0.125,0.0,0.0],
+      "bias": [0.5062205,0.5062205,0.5062205,0.5062205,0.65,0.65,0.65,0.65],
+      "exploring": true,
+      "vote": [0.9,0.0,0.0,0.6,0.8,0.7,0.0,0.0],
+      "merit_vote": [0.9,0.0,0.0,0.6,0.8,0.7,0.0,0.0],
+      "voted": true,
+      "ram_order": [3,4,5],
+      "tiers": {
+       "reads": 6,
+       "hits": 0,
+       "evictions": 3,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "begin_forward",
+     "explore": true,
+     "state": {
+      "slots": [0,4,5,3],
+      "admitted": [],
+      "merited": [],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       false,
+       false,
+       false
+      ],
+      "last_seen": [2.0,1.0,1.0,2.0,2.0,2.0,0.0,0.0],
+      "admits": [1.0,1.0,1.0,1.0,1.0,1.0,0.0,0.0],
+      "ever": [
+       true,
+       true,
+       true,
+       true,
+       true,
+       true,
+       false,
+       false
+      ],
+      "loads": 6,
+      "swaps": 2,
+      "segments": 2,
+      "recent": [0.20507812,0.095703125,0.095703125,0.20507812,0.109375,0.109375,0.0,0.0],
+      "bias": [0.40675962,0.52228963,0.52228963,0.40675962,0.5062205,0.5062205,0.65,0.65],
+      "exploring": true,
+      "vote": [0.9,0.0,0.0,0.6,0.8,0.7,0.0,0.0],
+      "merit_vote": [0.9,0.0,0.0,0.6,0.8,0.7,0.0,0.0],
+      "voted": false,
+      "ram_order": [3,4,5],
+      "tiers": {
+       "reads": 6,
+       "hits": 0,
+       "evictions": 3,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "admit",
+     "mass": [0.0,0.0,0.0,0.0,0.83,0.71,0.97,0.52],
+     "merit": null,
+     "returned_loads": 1,
+     "state": {
+      "slots": [0,4,5,6],
+      "admitted": [0,4,5,6],
+      "merited": [0,4,5,6],
+      "admitting": false,
+      "admitted_mask": [
+       true,
+       true,
+       true,
+       true
+      ],
+      "last_seen": [2.0,1.0,1.0,2.0,2.0,2.0,2.0,0.0],
+      "admits": [1.0,1.0,1.0,1.0,1.0,1.0,1.0,0.0],
+      "ever": [
+       true,
+       true,
+       true,
+       true,
+       true,
+       true,
+       true,
+       false
+      ],
+      "loads": 7,
+      "swaps": 3,
+      "segments": 2,
+      "recent": [0.33007812,0.095703125,0.095703125,0.20507812,0.234375,0.234375,0.125,0.0],
+      "bias": [0.40675962,0.52228963,0.52228963,0.40675962,0.5062205,0.5062205,0.65,0.65],
+      "exploring": true,
+      "vote": [0.9,0.0,0.0,0.6,1.63,1.41,0.97,0.52],
+      "merit_vote": [0.9,0.0,0.0,0.6,1.63,1.41,0.97,0.52],
+      "voted": true,
+      "ram_order": [4,5,6],
+      "tiers": {
+       "reads": 7,
+       "hits": 0,
+       "evictions": 4,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "begin_text",
+     "explore": true,
+     "state": {
+      "slots": [0,4,5,6],
+      "admitted": [],
+      "merited": [],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       false,
+       false,
+       false
+      ],
+      "last_seen": [2.0,1.0,1.0,2.0,2.0,2.0,2.0,0.0],
+      "admits": [1.0,1.0,1.0,1.0,1.0,1.0,1.0,0.0],
+      "ever": [
+       true,
+       true,
+       true,
+       true,
+       true,
+       true,
+       true,
+       false
+      ],
+      "loads": 7,
+      "swaps": 3,
+      "segments": 3,
+      "recent": [0.28881836,0.083740234,0.083740234,0.17944336,0.20507812,0.20507812,0.109375,0.0],
+      "bias": [0.33590087,0.536768,0.536768,0.43130526,0.40675962,0.40675962,0.5062205,0.65],
+      "exploring": true,
+      "vote": null,
+      "merit_vote": null,
+      "voted": false,
+      "ram_order": [4,5,6],
+      "tiers": {
+       "reads": 7,
+       "hits": 0,
+       "evictions": 4,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "admit",
+     "mass": [0.0,0.0,0.0,0.0,0.8,0.9,0.7,0.5],
+     "merit": null,
+     "returned_loads": 1,
+     "state": {
+      "slots": [7,4,5,6],
+      "admitted": [4,5,6,7],
+      "merited": [4,5,6,7],
+      "admitting": false,
+      "admitted_mask": [
+       true,
+       true,
+       true,
+       true
+      ],
+      "last_seen": [2.0,1.0,1.0,2.0,3.0,3.0,3.0,3.0],
+      "admits": [1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0],
+      "ever": [
+       true,
+       true,
+       true,
+       true,
+       true,
+       true,
+       true,
+       true
+      ],
+      "loads": 8,
+      "swaps": 4,
+      "segments": 3,
+      "recent": [0.28881836,0.083740234,0.083740234,0.17944336,0.33007812,0.33007812,0.234375,0.125],
+      "bias": [0.33590087,0.536768,0.536768,0.43130526,0.40675962,0.40675962,0.5062205,0.65],
+      "exploring": true,
+      "vote": [0.0,0.0,0.0,0.0,0.8,0.9,0.7,0.5],
+      "merit_vote": [0.0,0.0,0.0,0.0,0.8,0.9,0.7,0.5],
+      "voted": true,
+      "ram_order": [5,6,7],
+      "tiers": {
+       "reads": 8,
+       "hits": 0,
+       "evictions": 5,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "begin_text",
+     "explore": true,
+     "state": {
+      "slots": [7,4,5,6],
+      "admitted": [],
+      "merited": [],
+      "admitting": true,
+      "admitted_mask": [
+       false,
+       false,
+       false,
+       false
+      ],
+      "last_seen": [2.0,1.0,1.0,2.0,3.0,3.0,3.0,3.0],
+      "admits": [1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0],
+      "ever": [
+       true,
+       true,
+       true,
+       true,
+       true,
+       true,
+       true,
+       true
+      ],
+      "loads": 8,
+      "swaps": 4,
+      "segments": 4,
+      "recent": [0.25271606,0.073272705,0.073272705,0.15701294,0.28881836,0.28881836,0.20507812,0.109375],
+      "bias": [0.36479503,0.5497655,0.5497655,0.45399475,0.33590087,0.33590087,0.40675962,0.5062205],
+      "exploring": true,
+      "vote": null,
+      "merit_vote": null,
+      "voted": false,
+      "ram_order": [5,6,7],
+      "tiers": {
+       "reads": 8,
+       "hits": 0,
+       "evictions": 5,
+       "writebacks": 0
+      }
+     }
+    },
+    {
+     "op": "admit",
+     "mass": [0.4,0.3,0.2,0.1,0.0,0.0,0.0,0.0],
+     "merit": null,
+     "returned_loads": 4,
+     "state": {
+      "slots": [0,1,2,3],
+      "admitted": [0,1,2,3],
+      "merited": [0,1,2,3],
+      "admitting": false,
+      "admitted_mask": [
+       true,
+       true,
+       true,
+       true
+      ],
+      "last_seen": [4.0,4.0,4.0,4.0,3.0,3.0,3.0,3.0],
+      "admits": [2.0,2.0,2.0,2.0,1.0,1.0,1.0,1.0],
+      "ever": [
+       true,
+       true,
+       true,
+       true,
+       true,
+       true,
+       true,
+       true
+      ],
+      "loads": 12,
+      "swaps": 5,
+      "segments": 4,
+      "recent": [0.37771606,0.1982727,0.1982727,0.28201294,0.28881836,0.28881836,0.20507812,0.109375],
+      "bias": [0.36479503,0.5497655,0.5497655,0.45399475,0.33590087,0.33590087,0.40675962,0.5062205],
+      "exploring": true,
+      "vote": [0.4,0.3,0.2,0.1,0.0,0.0,0.0,0.0],
+      "merit_vote": [0.4,0.3,0.2,0.1,0.0,0.0,0.0,0.0],
+      "voted": true,
+      "ram_order": [1,2,3],
+      "tiers": {
+       "reads": 12,
+       "hits": 0,
+       "evictions": 9,
+       "writebacks": 0
+      }
+     }
+    }
+   ]
+  }
+ ],
+ "dying_cases": [
+  {
+   "name": "typical",
+   "note": "per_step 0.5, window 50; e4/e5 are inside their trial -> 0",
+   "born": [0,0,0,0,950,990,500,0],
+   "last_seen": [500,480,450,400,0,0,460,300],
+   "segments": 500,
+   "now": 1000,
+   "trial": 100,
+   "dying_at": 0.75,
+   "dying": [0.0,0.4,1.0,2.0,0.0,0.0,0.8,4.0],
+   "saturation_idle": 4
+  },
+  {
+   "name": "trial_zero",
+   "note": "trial <= 0 -> all zeros",
+   "born": [0,0,0,0,0,0,0,0],
+   "last_seen": [1,2,3,4,5,6,7,8],
+   "segments": 500,
+   "now": 1000,
+   "trial": 0,
+   "dying_at": 0.75,
+   "dying": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+   "saturation_idle": 0
+  },
+  {
+   "name": "now_zero",
+   "note": "now <= 0 -> zeros",
+   "born": [0,0,0,0,0,0,0,0],
+   "last_seen": [1,2,3,4,5,6,7,8],
+   "segments": 500,
+   "now": 0,
+   "trial": 100,
+   "dying_at": 0.75,
+   "dying": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+   "saturation_idle": 0
+  },
+  {
+   "name": "segments_zero",
+   "note": "window <= 0 -> zeros",
+   "born": [0,0,0,0,0,0,0,0],
+   "last_seen": [0,0,0,0,0,0,0,0],
+   "segments": 0,
+   "now": 1000,
+   "trial": 100,
+   "dying_at": 0.75,
+   "dying": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+   "saturation_idle": 0
+  },
+  {
+   "name": "last_seen_in_future_clamped",
+   "note": "idle = clamp_min(segments - last_seen, 0)",
+   "born": [0,0,0,0,0,0,0,0],
+   "last_seen": [600,501,500,499,450,400,300,0],
+   "segments": 500,
+   "now": 1000,
+   "trial": 100,
+   "dying_at": 0.75,
+   "dying": [0.0,0.0,0.0,0.02,1.0,2.0,4.0,10.0],
+   "saturation_idle": 4
+  },
+  {
+   "name": "born_in_future_is_young",
+   "note": "now - born < trial -> young -> 0 even for negative age",
+   "born": [1200,0,0,0,0,0,0,0],
+   "last_seen": [0,0,0,0,0,0,0,0],
+   "segments": 500,
+   "now": 1000,
+   "trial": 100,
+   "dying_at": 0.75,
+   "dying": [0.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0],
+   "saturation_idle": 7
+  },
+  {
+   "name": "newborn_clamped_to_own_age",
+   "note": "last_seen 0 for experts born at 900..: idle capped by age*per_step",
+   "born": [0,0,900,940,960,880,0,0],
+   "last_seen": [0,0,0,0,0,0,0,0],
+   "segments": 500,
+   "now": 1000,
+   "trial": 100,
+   "dying_at": 0.75,
+   "dying": [10.0,10.0,1.0,0.0,0.0,1.2,10.0,10.0],
+   "saturation_idle": 6
+  },
+  {
+   "name": "odd_fractions",
+   "note": "non-integer per_step 123/777; f32 arithmetic throughout",
+   "born": [10,99,250,0,700,123,5,333],
+   "last_seen": [12,40,90,3,118,77,1,60],
+   "segments": 123,
+   "now": 777,
+   "trial": 333,
+   "dying_at": 0.6,
+   "dying": [2.105691,1.5745257,0.62601626,2.2764227,0.0,0.8726287,2.314363,1.1951219],
+   "saturation_idle": 7
+  }
+ ]
+}

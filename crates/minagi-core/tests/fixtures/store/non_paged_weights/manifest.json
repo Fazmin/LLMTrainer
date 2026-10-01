@@ -1,0 +1,128 @@
+{
+ "step": 2,
+ "val": 2.5,
+ "cfg": {
+  "vocab_size": 265,
+  "n_layer": 8,
+  "n_head": 2,
+  "d_model": 32,
+  "block": 64,
+  "d_ff": 64,
+  "rope_theta": 10000.0,
+  "tie_embeddings": true,
+  "use_pool": true,
+  "pool_experts": 8,
+  "pool_d_ff": 16,
+  "pool_depth": 1,
+  "pool_top_k": 2,
+  "pool_capacity_factor": 1.5,
+  "pool_max": 8,
+  "pool_aux": 0.01,
+  "n_prelude": 1,
+  "n_recur": 1,
+  "n_coda": 0,
+  "max_steps": 4,
+  "min_steps": 1,
+  "train_steps_mean": 0.0,
+  "bptt_window": 4,
+  "ponder_beta": 0.01,
+  "halt_prior": 0.4,
+  "halt_thresh": 0.9,
+  "halt_freeze": true
+ },
+ "n_experts": 8,
+ "d_model": 32,
+ "d_ff": 16,
+ "core_tensors": [
+  "adapter.weight",
+  "halt.bias",
+  "halt.weight",
+  "head.weight",
+  "ln_f.weight",
+  "pool.gate",
+  "prelude.0.attn.proj.weight",
+  "prelude.0.attn.qkv.weight",
+  "prelude.0.ln1.weight",
+  "prelude.0.ln2.weight",
+  "prelude.0.mlp.w1.weight",
+  "prelude.0.mlp.w2.weight",
+  "prelude.0.mlp.w3.weight",
+  "recur.0.attn.proj.weight",
+  "recur.0.attn.qkv.weight",
+  "recur.0.ln1.weight",
+  "recur.0.ln2.weight",
+  "tok_emb.weight"
+ ],
+ "router_tensors": [
+  "recur.0.mlp.depth_emb",
+  "recur.0.mlp.router.weight"
+ ],
+ "experts": [
+  {
+   "id": 0,
+   "file": "e00000.npz",
+   "params": 1536,
+   "bytes": 18432,
+   "moments": true,
+   "gate": 0.9810019731521606
+  },
+  {
+   "id": 1,
+   "file": "e00001.npz",
+   "params": 1536,
+   "bytes": 18432,
+   "moments": true,
+   "gate": 1.019756555557251
+  },
+  {
+   "id": 2,
+   "file": "e00002.npz",
+   "params": 1536,
+   "bytes": 18432,
+   "moments": true,
+   "gate": 1.0142396688461304
+  },
+  {
+   "id": 3,
+   "file": "e00003.npz",
+   "params": 1536,
+   "bytes": 18432,
+   "moments": true,
+   "gate": 1.0165833234786987
+  },
+  {
+   "id": 4,
+   "file": "e00004.npz",
+   "params": 1536,
+   "bytes": 18432,
+   "moments": true,
+   "gate": 0.9863850474357605
+  },
+  {
+   "id": 5,
+   "file": "e00005.npz",
+   "params": 1536,
+   "bytes": 18432,
+   "moments": true,
+   "gate": 0.979800820350647
+  },
+  {
+   "id": 6,
+   "file": "e00006.npz",
+   "params": 1536,
+   "bytes": 18432,
+   "moments": true,
+   "gate": 1.018962025642395
+  },
+  {
+   "id": 7,
+   "file": "e00007.npz",
+   "params": 1536,
+   "bytes": 18432,
+   "moments": true,
+   "gate": 1.0196229219436646
+  }
+ ],
+ "total_bytes": 384352,
+ "removed_expert_files": 0
+}

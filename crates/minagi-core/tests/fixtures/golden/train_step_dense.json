@@ -1,0 +1,75 @@
+{
+ "weights_before": "dense_forward.npz variant 'perturbed' (same names, no prefix needed)",
+ "lr_base": 0.05,
+ "trunk_lr_mult": 0.1,
+ "weight_decay": 0.1,
+ "warmup": 100,
+ "betas": [0.9,0.95],
+ "eps": 1e-08,
+ "warmup_factor": "min(1, (train_step_index+1)/warmup)",
+ "train_step_indices": [98,100],
+ "runs": {
+  "wd_all": {
+   "clip": 1.0,
+   "groups": [
+    {
+     "weight_decay": 0.1,
+     "n_tensors": 19
+    }
+   ],
+   "steps": [
+    {
+     "train_step_index": 98,
+     "lr_trunk": 0.00495,
+     "factor": 0.99,
+     "loss": 7.9080376625061035,
+     "grad_norm": 11.442872047424316,
+     "clip_coef": 0.08739064008274484
+    },
+    {
+     "train_step_index": 100,
+     "lr_trunk": 0.005000000000000001,
+     "factor": 1.0,
+     "loss": 7.872229099273682,
+     "grad_norm": 10.370615005493164,
+     "clip_coef": 0.09642628745200041
+    }
+   ],
+   "params_stored": "every step",
+   "grads_stored": true
+  },
+  "wd_split": {
+   "clip": 100.0,
+   "groups": [
+    {
+     "weight_decay": 0.1,
+     "n_tensors": 13
+    },
+    {
+     "weight_decay": 0.0,
+     "n_tensors": 6
+    }
+   ],
+   "steps": [
+    {
+     "train_step_index": 98,
+     "lr_trunk": 0.00495,
+     "factor": 0.99,
+     "loss": 7.9080376625061035,
+     "grad_norm": 11.442872047424316,
+     "clip_coef": 1.0
+    },
+    {
+     "train_step_index": 100,
+     "lr_trunk": 0.005000000000000001,
+     "factor": 1.0,
+     "loss": 7.873701572418213,
+     "grad_norm": 10.382318496704102,
+     "clip_coef": 1.0
+    }
+   ],
+   "params_stored": "last step only",
+   "grads_stored": false
+  }
+ }
+}

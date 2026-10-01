@@ -1,0 +1,13 @@
+/target
+/target-*
+node_modules
+ui/dist
+.dev-data
+shots
+*.log
+.DS_Store
+# generated
+src-tauri/gen
+# python reference checkout / venv for golden tests
+tools/golden/ref
+.venv

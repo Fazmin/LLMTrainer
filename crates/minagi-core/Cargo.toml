@@ -1,0 +1,45 @@
+[package]
+name = "minagi-core"
+description = "mini-AGI ML engine on candle (recurrent adaptive-depth transformer + paged MoE)"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+minagi-types.workspace = true
+minagi-text.workspace = true
+minagi-data.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+rand.workspace = true
+rand_chacha.workspace = true
+flume.workspace = true
+candle-core = "0.11"
+candle-nn = "0.11"
+# npz container (stored for writing; deflate needed to read numpy.savez_compressed files)
+zip = { version = "8", default-features = false, features = ["deflate"] }
+
+# Backend selection per target. Apple Silicon: Metal + Accelerate. Intel mac: Accelerate (CPU).
+[target.'cfg(all(target_os = "macos", target_arch = "aarch64"))'.dependencies]
+candle-core = { version = "0.11", features = ["metal", "accelerate"] }
+candle-nn = { version = "0.11", features = ["metal", "accelerate"] }
+[target.'cfg(all(target_os = "macos", target_arch = "x86_64"))'.dependencies]
+candle-core = { version = "0.11", features = ["accelerate"] }
+candle-nn = { version = "0.11", features = ["accelerate"] }
+
+[target.'cfg(target_os = "macos")'.dependencies]
+# autorelease pool around every Metal training step (candle issues #2271 / #3755)
+objc2 = "0.6"
+
+[dev-dependencies]
+half = "2"   # reference bf16 rounding in tests
+tempfile = "3"
+
+[features]
+default = []
+# Opt-in artefacts (separate downloads on Windows/Linux)
+cuda = ["candle-core/cuda", "candle-nn/cuda"]
+mkl = ["candle-core/mkl", "candle-nn/mkl"]

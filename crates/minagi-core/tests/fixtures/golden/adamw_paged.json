@@ -1,0 +1,538 @@
+{
+ "steps": [
+  {
+   "step": 0,
+   "favored_by_recent": [0,1,2,3],
+   "slots_before": [-1,-1,-1,-1],
+   "slots_used": [3,2,0,1],
+   "own_flags_at_optimizer_step": [
+    false,
+    false,
+    false,
+    false
+   ],
+   "own_flags_after_step": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "adam_step_all_params": 1,
+   "min_gap_topk_boundary_in_routing_scores": 0.0010756850242614746,
+   "min_gap_top1_top2_in_routing_scores": 0.0056552886962890625,
+   "min_abs_distance_of_1_minus_cum_to_halt_thresh": 0.011680305004119873,
+   "active_count_per_row": [16,12,9,7],
+   "last_pooled_row": 3,
+   "loss": 7.505739688873291,
+   "loss_model": 7.495360851287842,
+   "aux": 1.0378726720809937,
+   "grad_norm": 12.141270637512207,
+   "clip_coef": 0.08236369548889394,
+   "tier_log": [
+    [
+     "fetch",
+     3,
+     "disk",
+     true
+    ],
+    [
+     "fetch",
+     2,
+     "disk",
+     true
+    ],
+    [
+     "fetch",
+     0,
+     "disk",
+     true
+    ],
+    [
+     "fetch",
+     1,
+     "disk",
+     true
+    ]
+   ],
+   "ram_order": [2,0,1],
+   "dirty": [],
+   "loads_total": 4,
+   "swaps_total": 1,
+   "segments": 1,
+   "recent_after": [0.001,0.001,0.001,0.001,5.994,5.994,5.994,5.994],
+   "last_seen": [0.0,0.0,1.0,1.0,0.0,0.0,1.0,1.0],
+   "admits": [1.0,1.0,1.0,1.0,0.0,0.0,0.0,0.0],
+   "pool_use": [29.0,6.0,23.0,30.0,0.0,0.0,0.0,0.0],
+   "dropped_routed_this_step": [2,88]
+  },
+  {
+   "step": 1,
+   "favored_by_recent": [0,1,2,4],
+   "slots_before": [3,2,0,1],
+   "slots_used": [4,2,0,1],
+   "own_flags_at_optimizer_step": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "own_flags_after_step": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "adam_step_all_params": 2,
+   "min_gap_topk_boundary_in_routing_scores": 0.0032073259353637695,
+   "min_gap_top1_top2_in_routing_scores": 0.019756555557250977,
+   "min_abs_distance_of_1_minus_cum_to_halt_thresh": 0.01591569185256958,
+   "active_count_per_row": [16,8,4,3],
+   "last_pooled_row": 3,
+   "loss": 7.948916435241699,
+   "loss_model": 7.9381585121154785,
+   "aux": 1.075790524482727,
+   "grad_norm": 12.525250434875488,
+   "clip_coef": 0.0798387166277226,
+   "tier_log": [
+    [
+     "put",
+     3,
+     true
+    ],
+    [
+     "fetch",
+     4,
+     "disk",
+     true
+    ],
+    [
+     "fetch",
+     4,
+     "ram",
+     false
+    ]
+   ],
+   "ram_order": [1,3,4],
+   "dirty": [3],
+   "loads_total": 5,
+   "swaps_total": 2,
+   "segments": 2,
+   "recent_after": [0.001,0.001,0.001,5.994,0.001,5.994,5.994,5.994],
+   "last_seen": [2.0,0.0,2.0,1.0,0.0,2.0,1.0,2.0],
+   "admits": [1.0,1.0,1.0,1.0,1.0,0.0,0.0,0.0],
+   "pool_use": [45.0,22.0,48.0,30.0,5.0,0.0,0.0,0.0],
+   "dropped_routed_this_step": [3,62]
+  },
+  {
+   "step": 2,
+   "favored_by_recent": [0,1,3,4],
+   "slots_before": [4,2,0,1],
+   "slots_used": [4,3,0,1],
+   "own_flags_at_optimizer_step": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "own_flags_after_step": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "adam_step_all_params": 3,
+   "min_gap_topk_boundary_in_routing_scores": 0.008148610591888428,
+   "min_gap_top1_top2_in_routing_scores": 0.002391219139099121,
+   "min_abs_distance_of_1_minus_cum_to_halt_thresh": 0.01572805643081665,
+   "active_count_per_row": [16,9,8,4],
+   "last_pooled_row": 3,
+   "loss": 8.580486297607422,
+   "loss_model": 8.569979667663574,
+   "aux": 1.050644874572754,
+   "grad_norm": 13.341893196105957,
+   "clip_coef": 0.07495187604559672,
+   "tier_log": [
+    [
+     "put",
+     2,
+     true
+    ],
+    [
+     "fetch",
+     3,
+     "ram",
+     true
+    ],
+    [
+     "fetch",
+     3,
+     "ram",
+     false
+    ]
+   ],
+   "ram_order": [4,2,3],
+   "dirty": [2,3],
+   "loads_total": 6,
+   "swaps_total": 3,
+   "segments": 3,
+   "recent_after": [0.001,0.001,5.994,0.001,0.001,5.994,5.994,5.994],
+   "last_seen": [3.0,3.0,2.0,3.0,0.0,3.0,1.0,2.0],
+   "admits": [1.0,1.0,1.0,2.0,1.0,0.0,0.0,0.0],
+   "pool_use": [75.0,43.0,48.0,44.0,14.0,0.0,0.0,0.0],
+   "dropped_routed_this_step": [2,74]
+  },
+  {
+   "step": 3,
+   "favored_by_recent": [2,5,6,7],
+   "slots_before": [6,5,2,3],
+   "slots_used": [6,5,2,7],
+   "own_flags_at_optimizer_step": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "own_flags_after_step": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "adam_step_all_params": 4,
+   "min_gap_topk_boundary_in_routing_scores": 0.014323830604553223,
+   "min_gap_top1_top2_in_routing_scores": 0.002530515193939209,
+   "min_abs_distance_of_1_minus_cum_to_halt_thresh": 0.012052178382873535,
+   "active_count_per_row": [16,15,12,11],
+   "last_pooled_row": 3,
+   "loss": 6.873477935791016,
+   "loss_model": 6.862965106964111,
+   "aux": 1.0512675046920776,
+   "grad_norm": 11.770045280456543,
+   "clip_coef": 0.0849614331305086,
+   "tier_log": [
+    [
+     "fetch",
+     7,
+     "disk",
+     true
+    ],
+    [
+     "fetch",
+     6,
+     "disk",
+     false
+    ],
+    [
+     "fetch",
+     5,
+     "disk",
+     false
+    ],
+    [
+     "fetch",
+     2,
+     "disk",
+     false
+    ],
+    [
+     "fetch",
+     7,
+     "disk",
+     false
+    ]
+   ],
+   "ram_order": [5,2,7],
+   "dirty": [],
+   "loads_total": 12,
+   "swaps_total": 6,
+   "segments": 6,
+   "recent_after": [5.994,5.994,0.001,5.994,5.994,0.001,0.001,0.001],
+   "last_seen": [3.0,6.0,6.0,5.0,6.0,5.0,5.0,6.0],
+   "admits": [1.0,1.0,2.0,3.0,1.0,1.0,1.0,2.0],
+   "pool_use": [75.0,63.0,104.0,52.0,37.0,39.0,41.0,53.0],
+   "dropped_routed_this_step": [0,108]
+  }
+ ],
+ "evals_between_step2_and_step3": [
+  {
+   "dropped_routed": [1,72],
+   "slots_after": [4,7,2,1],
+   "admitted": [1,2,4,7],
+   "tier_log": [
+    [
+     "put",
+     3,
+     true
+    ],
+    [
+     "put",
+     0,
+     true
+    ],
+    [
+     "fetch",
+     7,
+     "disk",
+     true
+    ],
+    [
+     "write_back",
+     2,
+     true
+    ],
+    [
+     "fetch",
+     2,
+     "disk",
+     true
+    ],
+    [
+     "write_back",
+     3,
+     true
+    ]
+   ],
+   "ram_order": [0,7,2],
+   "loads_total": 8,
+   "segments": 4
+  },
+  {
+   "dropped_routed": [1,60],
+   "slots_after": [6,5,2,3],
+   "admitted": [2,3,5,6],
+   "tier_log": [
+    [
+     "put",
+     4,
+     true
+    ],
+    [
+     "write_back",
+     0,
+     true
+    ],
+    [
+     "put",
+     1,
+     true
+    ],
+    [
+     "fetch",
+     6,
+     "disk",
+     true
+    ],
+    [
+     "fetch",
+     5,
+     "disk",
+     true
+    ],
+    [
+     "write_back",
+     4,
+     true
+    ],
+    [
+     "fetch",
+     3,
+     "disk",
+     true
+    ],
+    [
+     "write_back",
+     1,
+     true
+    ]
+   ],
+   "ram_order": [6,5,3],
+   "loads_total": 11,
+   "segments": 5
+  }
+ ],
+ "flush_tier_log": [
+  [
+   "put",
+   6,
+   true
+  ],
+  [
+   "put",
+   5,
+   true
+  ],
+  [
+   "put",
+   2,
+   true
+  ],
+  [
+   "put",
+   7,
+   true
+  ],
+  [
+   "write_back",
+   6,
+   true
+  ],
+  [
+   "write_back",
+   2,
+   true
+  ],
+  [
+   "write_back",
+   5,
+   true
+  ],
+  [
+   "write_back",
+   7,
+   true
+  ]
+ ],
+ "files": {
+  "0": [
+   "w1",
+   "w1_m",
+   "w1_v",
+   "w2",
+   "w2_m",
+   "w2_v",
+   "w3",
+   "w3_m",
+   "w3_v"
+  ],
+  "1": [
+   "w1",
+   "w1_m",
+   "w1_v",
+   "w2",
+   "w2_m",
+   "w2_v",
+   "w3",
+   "w3_m",
+   "w3_v"
+  ],
+  "2": [
+   "w1",
+   "w1_m",
+   "w1_v",
+   "w2",
+   "w2_m",
+   "w2_v",
+   "w3",
+   "w3_m",
+   "w3_v"
+  ],
+  "3": [
+   "w1",
+   "w1_m",
+   "w1_v",
+   "w2",
+   "w2_m",
+   "w2_v",
+   "w3",
+   "w3_m",
+   "w3_v"
+  ],
+  "4": [
+   "w1",
+   "w1_m",
+   "w1_v",
+   "w2",
+   "w2_m",
+   "w2_v",
+   "w3",
+   "w3_m",
+   "w3_v"
+  ],
+  "5": [
+   "w1",
+   "w1_m",
+   "w1_v",
+   "w2",
+   "w2_m",
+   "w2_v",
+   "w3",
+   "w3_m",
+   "w3_v"
+  ],
+  "6": [
+   "w1",
+   "w1_m",
+   "w1_v",
+   "w2",
+   "w2_m",
+   "w2_v",
+   "w3",
+   "w3_m",
+   "w3_v"
+  ],
+  "7": [
+   "w1",
+   "w1_m",
+   "w1_v",
+   "w2",
+   "w2_m",
+   "w2_v",
+   "w3",
+   "w3_m",
+   "w3_v"
+  ]
+ },
+ "config": {
+  "lr_pool": 0.01,
+  "lr_trunk": 0.001,
+  "trunk_lr_mult": 0.1,
+  "weight_decay": 0.1,
+  "betas": [0.9,0.95],
+  "eps": 1e-08,
+  "clip": 1.0,
+  "ram_capacity": 3,
+  "pool_aux_weight": 0.01,
+  "fused": false,
+  "foreach": false,
+  "param_groups": [
+   {
+    "name": "trunk",
+    "n_tensors": 16,
+    "lr": 0.001,
+    "weight_decay": 0.1
+   },
+   {
+    "name": "pool",
+    "n_tensors": 6,
+    "lr": 0.01,
+    "weight_decay": 0.1
+   }
+  ],
+  "trunk_param_names": [
+   "tok_emb.weight",
+   "prelude.0.ln1.weight",
+   "prelude.0.attn.qkv.weight",
+   "prelude.0.attn.proj.weight",
+   "prelude.0.ln2.weight",
+   "prelude.0.mlp.w1.weight",
+   "prelude.0.mlp.w3.weight",
+   "prelude.0.mlp.w2.weight",
+   "recur.0.ln1.weight",
+   "recur.0.attn.qkv.weight",
+   "recur.0.attn.proj.weight",
+   "recur.0.ln2.weight",
+   "adapter.weight",
+   "ln_f.weight",
+   "halt.weight",
+   "halt.bias"
+  ],
+  "pool_param_names": [
+   "recur.0.mlp.depth_emb",
+   "recur.0.mlp.router.weight",
+   "pool.w1",
+   "pool.w3",
+   "pool.w2",
+   "pool.gate"
+  ]
+ }
+}

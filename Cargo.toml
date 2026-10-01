@@ -1,0 +1,47 @@
+[workspace]
+resolver = "3"
+members = ["crates/*", "src-tauri"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.93"
+license = "MIT"
+publish = false
+
+[workspace.dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1", features = ["float_roundtrip"] }
+thiserror = "2"
+flume = "0.12"
+uuid = { version = "1", features = ["v7"] }
+rand = "0.9"
+rand_chacha = "0.9"
+rusqlite = { version = "0.40", features = ["bundled"] }
+r2d2 = "0.8"
+r2d2_sqlite = "0.35"
+specta = { version = "=2.0.0-rc.25", features = ["derive"] }
+specta-typescript = "=0.0.12"
+tauri-specta = { version = "=2.0.0-rc.25", features = ["derive", "typescript"] }
+minagi-types = { path = "crates/minagi-types" }
+minagi-mock = { path = "crates/minagi-mock" }
+minagi-store = { path = "crates/minagi-store" }
+minagi-data = { path = "crates/minagi-data" }
+minagi-text = { path = "crates/minagi-text" }
+minagi-core = { path = "crates/minagi-core" }
+
+# candle 0.11.0 has silent bugs fixed only on main (Metal NaN grads #3847/#3873,
+# index_select backward #3997, CPU stride-0 matmul #3960). Pin to a verified commit.
+[patch.crates-io]
+candle-core = { git = "https://github.com/huggingface/candle", rev = "5ba5d5b468b5b1df40e82dd3d556987bedeea041" }
+candle-nn = { git = "https://github.com/huggingface/candle", rev = "5ba5d5b468b5b1df40e82dd3d556987bedeea041" }
+candle-kernels = { git = "https://github.com/huggingface/candle", rev = "5ba5d5b468b5b1df40e82dd3d556987bedeea041" }
+candle-metal-kernels = { git = "https://github.com/huggingface/candle", rev = "5ba5d5b468b5b1df40e82dd3d556987bedeea041" }
+
+# candle in debug builds is unusable; optimise dependencies even in dev.
+[profile.dev.package."*"]
+opt-level = 3
+
+[profile.release]
+lto = "thin"
+codegen-units = 1

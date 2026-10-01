@@ -1,0 +1,279 @@
+{
+ "step": 9,
+ "val": 1.234,
+ "cfg": {
+  "vocab_size": 265,
+  "n_layer": 8,
+  "n_head": 2,
+  "d_model": 32,
+  "block": 64,
+  "d_ff": 64,
+  "rope_theta": 10000.0,
+  "tie_embeddings": true,
+  "use_pool": true,
+  "pool_experts": 8,
+  "pool_d_ff": 16,
+  "pool_depth": 1,
+  "pool_top_k": 2,
+  "pool_capacity_factor": 1.5,
+  "pool_max": 10,
+  "pool_aux": 0.01,
+  "n_prelude": 1,
+  "n_recur": 1,
+  "n_coda": 0,
+  "max_steps": 4,
+  "min_steps": 1,
+  "train_steps_mean": 0.0,
+  "bptt_window": 4,
+  "ponder_beta": 0.01,
+  "halt_prior": 0.4,
+  "halt_thresh": 0.9,
+  "halt_freeze": true,
+  "pool_resident": 4,
+  "pool_ever": [
+   true,
+   true,
+   true,
+   true,
+   true,
+   false,
+   false,
+   false,
+   false,
+   false
+  ]
+ },
+ "telemetry": {
+  "gate": [
+   0.946752,
+   0.998368,
+   1.025861,
+   0.934828,
+   1.015411,
+   0.000994,
+   0.000994,
+   0.000994,
+   0.000994,
+   0.000999
+  ],
+  "gate_seen": [
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "use": [
+   129.0,
+   213.0,
+   541.0,
+   80.0,
+   623.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "admits": [
+   2.0,
+   2.0,
+   2.0,
+   2.0,
+   2.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "born": [
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   4.0,
+   4.0,
+   4.0,
+   4.0,
+   9.0
+  ],
+  "last_seen": [
+   10.0,
+   7.0,
+   10.0,
+   7.0,
+   10.0,
+   7.0,
+   7.0,
+   7.0,
+   7.0,
+   0.0
+  ],
+  "recent": [
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "ever": [
+   true,
+   true,
+   true,
+   true,
+   true,
+   false,
+   false,
+   false,
+   false,
+   false
+  ],
+  "uid": [
+   1,
+   2,
+   4,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "next_uid": 13,
+  "segments": 10
+ },
+ "n_experts": 10,
+ "d_model": 32,
+ "d_ff": 16,
+ "paged": true,
+ "core_tensors": [
+  "adapter.weight",
+  "halt.bias",
+  "halt.weight",
+  "head.weight",
+  "ln_f.weight",
+  "prelude.0.attn.proj.weight",
+  "prelude.0.attn.qkv.weight",
+  "prelude.0.ln1.weight",
+  "prelude.0.ln2.weight",
+  "prelude.0.mlp.w1.weight",
+  "prelude.0.mlp.w2.weight",
+  "prelude.0.mlp.w3.weight",
+  "recur.0.attn.proj.weight",
+  "recur.0.attn.qkv.weight",
+  "recur.0.ln1.weight",
+  "recur.0.ln2.weight",
+  "tok_emb.weight"
+ ],
+ "router_tensors": [
+  "pool.gate",
+  "recur.0.mlp.depth_emb",
+  "recur.0.mlp.router.weight"
+ ],
+ "experts": [
+  {
+   "id": 1,
+   "file": "e00001.npz",
+   "bytes": 14458,
+   "params": 1536,
+   "moments": true,
+   "gate": 0.9467523097991943
+  },
+  {
+   "id": 2,
+   "file": "e00002.npz",
+   "bytes": 14458,
+   "params": 1536,
+   "moments": true,
+   "gate": 0.9983682632446289
+  },
+  {
+   "id": 4,
+   "file": "e00004.npz",
+   "bytes": 14458,
+   "params": 1536,
+   "moments": true,
+   "gate": 1.0258610248565674
+  },
+  {
+   "id": 6,
+   "file": "e00006.npz",
+   "bytes": 14458,
+   "params": 1536,
+   "moments": true,
+   "gate": 0.9348281621932983
+  },
+  {
+   "id": 7,
+   "file": "e00007.npz",
+   "bytes": 14458,
+   "params": 1536,
+   "moments": true,
+   "gate": 1.015411138534546
+  },
+  {
+   "id": 8,
+   "file": "e00008.npz",
+   "bytes": 6874,
+   "params": 1536,
+   "moments": true,
+   "gate": 0.0009940150193870068
+  },
+  {
+   "id": 9,
+   "file": "e00009.npz",
+   "bytes": 6874,
+   "params": 1536,
+   "moments": true,
+   "gate": 0.0009940150193870068
+  },
+  {
+   "id": 10,
+   "file": "e00010.npz",
+   "bytes": 6874,
+   "params": 1536,
+   "moments": true,
+   "gate": 0.0009940150193870068
+  },
+  {
+   "id": 11,
+   "file": "e00011.npz",
+   "bytes": 6874,
+   "params": 1536,
+   "moments": true,
+   "gate": 0.0009940150193870068
+  },
+  {
+   "id": 12,
+   "file": "e00012.npz",
+   "bytes": 6874,
+   "params": 1536,
+   "moments": true,
+   "gate": 0.000999000039882958
+  }
+ ],
+ "total_bytes": 368684,
+ "read_chars": 4321,
+ "read_nats": 1234.5,
+ "plasticity": {
+  "lr_mult": 0.75,
+  "history": [
+   1,
+   2
+  ]
+ },
+ "context_now": 23
+}

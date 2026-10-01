@@ -1,0 +1,16 @@
+[package]
+name = "minagi-text"
+description = "Byte tokenizer and text streams for training: round-robin lanes, passage sampling, held-out evaluation"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+rand.workspace = true
+rand_chacha.workspace = true
+thiserror.workspace = true
+
+[dev-dependencies]
+tempfile = "3"

@@ -1,0 +1,17 @@
+# Standalone (own workspace) repro of candle issue #3847 against crates.io candle-core 0.11.0.
+# 0.11.0 does not compile on rustc 1.93/aarch64 (unstable `stdarch_neon_f16`), so build with
+#   RUSTC_BOOTSTRAP=1 RUSTFLAGS="-Zcrate-attr=feature(stdarch_neon_f16)" cargo run
+# Run it several times: the out-of-bounds read shows up in some processes only.
+[package]
+name = "candle0110-repro"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+candle-core = { version = "=0.11.0", features = ["metal"] }
+
+[workspace]
+
+[profile.dev.package."*"]
+opt-level = 3

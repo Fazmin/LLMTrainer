@@ -1,0 +1,184 @@
+@import "tailwindcss";
+
+/*
+ * Design tokens. Neutrals and the categorical palette come from the validated reference palette; dark values are
+ * selected steps for the dark surface, not an automatic flip. Light values live in :root, dark ones are declared under
+ * both the OS preference and the explicit [data-theme] switch (an explicit light choice beats an OS-dark setting).
+ */
+:root {
+  color-scheme: light;
+  --page: #f4f4f2;
+  --surface: #fcfcfb;
+  --surface-2: #f0efec;
+  --ink: #0b0b0b;
+  --ink-2: #52514e;
+  --muted: #6b6a65;
+  --hairline: #e1e0d9;
+  --axis: #c3c2b7;
+  --accent: #2a78d6;
+  --btn: #256abf;
+  --btn-hover: #1c5cab;
+  --accent-ink: #1c5cab;
+  --accent-soft: #e6f0fc;
+  --good: #0ca30c;
+  --good-ink: #067406;
+  --warning: #fab219;
+  --warning-ink: #8a5a00;
+  --serious: #ec835a;
+  --critical: #d03b3b;
+  --critical-ink: #b92f2f;
+  --lane-1: #2a78d6;
+  --lane-2: #eb6834;
+  --lane-3: #1baf7a;
+  --lane-4: #eda100;
+  --lane-5: #e87ba4;
+  --lane-6: #008300;
+  --lane-7: #4a3aa7;
+  --lane-8: #e34948;
+  --focus: #2a78d6;
+}
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    color-scheme: dark;
+    --page: #0d0d0d;
+    --surface: #1a1a19;
+    --surface-2: #262625;
+    --ink: #ffffff;
+    --ink-2: #c3c2b7;
+    --muted: #9b9992;
+    --critical-ink: #ff6b6b;
+    --hairline: #2c2c2a;
+    --axis: #383835;
+    --accent: #3987e5;
+    --accent-ink: #86b6ef;
+    --accent-soft: #14253a;
+    --good-ink: #5fd35f;
+    --warning-ink: #fab219;
+    --lane-1: #3987e5;
+    --lane-2: #d95926;
+    --lane-3: #199e70;
+    --lane-4: #c98500;
+    --lane-5: #d55181;
+    --lane-6: #008300;
+    --lane-7: #9085e9;
+    --lane-8: #e66767;
+    --focus: #6da7ec;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0d0d0d;
+  --surface: #1a1a19;
+  --surface-2: #262625;
+  --ink: #ffffff;
+  --ink-2: #c3c2b7;
+  --muted: #9b9992;
+  --critical-ink: #ff6b6b;
+  --hairline: #2c2c2a;
+  --axis: #383835;
+  --accent: #3987e5;
+  --accent-ink: #86b6ef;
+  --accent-soft: #14253a;
+  --good-ink: #5fd35f;
+  --warning-ink: #fab219;
+  --lane-1: #3987e5;
+  --lane-2: #d95926;
+  --lane-3: #199e70;
+  --lane-4: #c98500;
+  --lane-5: #d55181;
+  --lane-6: #008300;
+  --lane-7: #9085e9;
+  --lane-8: #e66767;
+  --focus: #6da7ec;
+}
+
+@theme inline {
+  --color-page: var(--page);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-hairline: var(--hairline);
+  --color-axis: var(--axis);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
+  --color-good: var(--good);
+  --color-good-ink: var(--good-ink);
+  --color-warning: var(--warning);
+  --color-warning-ink: var(--warning-ink);
+  --color-serious: var(--serious);
+  --color-critical: var(--critical);
+  --color-critical-ink: var(--critical-ink);
+  --color-btn: var(--btn);
+  --color-btn-hover: var(--btn-hover);
+  --font-sans: "Figtree Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: "Source Serif 4 Variable", ui-serif, Georgia, serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --radius-control: 8px;
+  --radius-panel: 12px;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+body {
+  margin: 0;
+  background: var(--page);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  font-variant-numeric: tabular-nums;
+}
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+::selection {
+  background: var(--accent-soft);
+}
+/* In the base layer so utility classes (text-white, text-ink-2, ...) can override them. */
+@layer base {
+  button {
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+  }
+  button:disabled {
+    cursor: not-allowed;
+  }
+}
+
+/* The one pulse in the interface: the dot beside the stage name while the model is reading. */
+@keyframes reading-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.45; transform: scale(0.8); }
+}
+.pulse-dot {
+  animation: reading-pulse 2.4s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* A chart that is refetching keeps its previous render, dimmed, so nothing jumps. */
+.refetching {
+  opacity: 0.6;
+  transition: opacity 120ms ease-out;
+}
+
+/* Text the model wrote. Serif reads as prose; code-like lanes switch to mono in the component. */
+.model-text {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}

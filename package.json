@@ -1,0 +1,18 @@
+{
+  "name": "llm-trainer",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "dev:web": "pnpm --filter ui dev",
+    "build:ui": "pnpm --filter ui build",
+    "tauri": "tauri",
+    "test": "pnpm --filter ui test",
+    "typecheck": "pnpm --filter ui typecheck"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "1.63.0",
+    "@tauri-apps/cli": "2.12.1"
+  },
+  "packageManager": "pnpm@10.28.2"
+}

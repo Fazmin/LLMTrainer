@@ -1,0 +1,47 @@
+[package]
+name = "llm-trainer-app"
+description = "LLM Trainer: train a small language model on your own computer"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[lib]
+name = "llm_trainer_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+tauri-plugin-dialog = "2"
+tauri-plugin-opener = "2"
+tauri-plugin-notification = "2"
+tauri-plugin-window-state = "2"
+tauri-plugin-single-instance = "2"
+tauri-specta.workspace = true
+specta.workspace = true
+specta-typescript.workspace = true
+minagi-types.workspace = true
+minagi-store.workspace = true
+minagi-mock.workspace = true
+minagi-core = { workspace = true, optional = true }
+minagi-data.workspace = true
+tokio-util = "0.7"
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+flume.workspace = true
+sysinfo = "0.37"
+keepawake = "0.6"
+
+[dev-dependencies]
+tempfile = "3"
+tauri = { version = "2", features = ["test"] }
+
+[features]
+# The real (candle) engine. Build with --no-default-features for UI work that only needs the simulated engine.
+default = ["real-engine"]
+real-engine = ["dep:minagi-core"]
