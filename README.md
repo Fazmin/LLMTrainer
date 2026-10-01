@@ -2,7 +2,7 @@
 
 A desktop app that trains a small language model on your own computer, built so anyone can do it: pick a size, point it at some text, press start, and watch it learn to write.
 
-It is a Rust and Tauri re-implementation of [mini-AGI](https://github.com/volotat/mini-AGI) (MIT), a byte-level language model that trains from scratch on a stream of text. The model keeps learning as it reads, reuses one block several times per character (so it can "think longer" about hard characters), and routes each character through a pool of small expert networks that can grow and shrink during training.
+It is a Rust and Tauri implementation of a byte-level language model that trains from scratch on a stream of text. The model keeps learning as it reads, reuses one block several times per character (so it can "think longer" about hard characters), and routes each character through a pool of small expert networks that can grow and shrink during training.
 
 ## Status
 
