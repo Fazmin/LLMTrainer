@@ -8,7 +8,7 @@
 
 LLM Trainer is a desktop app for people who have never trained a model. You pick some text and a size, press start, and it shows you in plain English what the program is doing, how far along it is, and whether it is learning. By default nothing is simulated: the model is built and trained on your own machine, on its GPU if it has one.
 
-Under the hood it is a Rust and Tauri port of [mini-AGI](https://github.com/volotat/mini-AGI): a byte-level language model that starts out knowing nothing, keeps learning as it reads, can "think longer" about hard characters, and routes each character through a pool of small expert networks that grows and shrinks during training.
+The project was inspired by [mini-AGI](https://github.com/volotat/mini-AGI): a byte-level language model that starts out knowing nothing, keeps learning as it reads, can "think longer" about hard characters, and routes each character through a pool of small expert networks that grows and shrinks during training.
 
 ## What you can do
 
