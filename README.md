@@ -14,12 +14,12 @@ The project was inspired by [mini-AGI](https://github.com/volotat/mini-AGI): a b
 
 - **Start with one click.** Quick Start downloads a collection of simple stories (87 MB), sets up a small model and trains it for ten minutes. You see it go from nonsense to words.
 - **Teach it your own text.** Drop folders of notes, books or code on the window. Each top-level folder becomes its own kind of text, so you can see how well it learns each one.
-- **Choose a size.** Tiny, Small or Full (the size of the original research model), with speed and memory estimates for the computer you are on.
+- **Choose a size.** Tiny, Small or Full, with speed and memory estimates for the computer you are on.
 - **Always know what is happening.** A banner names the current stage in plain words, with a progress bar and the time to the next check-up. An "Is it learning?" verdict tells you whether to keep going. Every chart has a "what is this?" note.
 - **Watch it learn to write.** After every check-up the model is asked to continue a few openings. Slide back through time to read what it wrote at each point.
 - **Look inside.** See which experts are working, whether the pool may grow, and how many thinking steps each character gets.
 - **Chat with it.** Continue your text, or ask a question. Optionally let it learn from the chat, on a private copy so your original run is never changed.
-- **Keep, compare and share.** Every run is saved. Stop and continue later, continue as a new run with different settings, compare runs side by side, export the weights, or import a model from the original mini-AGI.
+- **Keep, compare and share.** Every run is saved. Stop and continue later, continue as a new run with different settings, compare runs side by side, export the weights, or import a saved model.
 - **Stay on your computer.** The only download is the practice text you ask for. Runs, metrics and chats live in a local SQLite database.
 
 ## A tour
@@ -87,7 +87,7 @@ Measured on an Apple M4 Pro with 24 GB of memory:
 |---|---|---|---|
 | Tiny | Trying things out, small amounts of text | about 10,000 characters per second | about 1 GB |
 | Small | A bigger collection of text on a computer with a good GPU | about 2,500 characters per second | about 3 to 5 GB |
-| Full | The size of the original research model | about 350 characters per second | about 12 to 15 GB |
+| Full | The largest size, for a powerful GPU and a lot of patience | about 350 characters per second | about 12 to 15 GB |
 
 Full recomputes each thinking step while it learns, so its memory does not grow with depth. It has only been run for short stretches, never for a long training. The Set up screen shows estimates for your own machine before you start. Treat its memory figure as a rough guide, not a promise.
 
@@ -97,13 +97,8 @@ Full recomputes each thinking step while it learns, so its memory does not grow 
 - **Thinking longer.** A few dense layers feed one weight-shared block that is applied up to several times per character. A halting head decides when each character has thought enough; characters that stop early are frozen and later characters read what they left behind.
 - **A pool of experts.** Every expert is a file. Recently used ones stay in memory, and a fixed number of slots on the GPU hold the ones the current text asked for. The pool grows by recombining existing experts, and shrinks by deleting ones nothing has asked for in a long time.
 - **Learning as it reads.** One optimiser step per chunk of text. A controller steers the learning rate from the held-out score, and the context window grows as training goes on.
-- **Checkpoints in the original's layout.** A model trained here loads in the Python original, and the original's checkpoints import here.
 
-### How faithful is the engine?
-
-The engine is held to the original by **golden tests**: fixtures written by the Python reference (`tools/golden/`) are replayed in Rust and must match. They cover the tensor primitives, the whole recurrent forward (halting, frozen characters, the PonderNet loss, eight variants), cached inference, expert admission and routing (including capacity drops and the exploration bonus), four real AdamW steps with experts paged in and out of the card, greedy decoding with the adaptation trace, and the tokenizer. A model trained and saved by the Rust engine scores the same text identically (to six digits) when loaded in the original Python code.
-
-Deliberate differences: capacity drops are decided in token order (the original's order is unspecified), non-finite steps are skipped instead of poisoning the weights, and a fresh model is created from the preset rather than from `config.yaml`. [docs/engine.md](docs/engine.md) has the details and the traps found along the way.
+[docs/engine.md](docs/engine.md) has the details of the engine, how it is tested, and the traps found along the way.
 
 ## Status
 
@@ -151,7 +146,7 @@ crates/minagi-core    the ML engine on candle: ops, model, expert pool, optimise
 crates/minagi-cli     command-line tools: train, benchmarks
 src-tauri             the desktop app: commands, the recorder, session control
 ui                    React + TypeScript frontend, charts in ECharts
-tools/golden          Python reference dumps used by the parity tests (see its README)
+tools/golden          reference outputs the engine's tests compare against (see its README)
 scripts               screenshot, accessibility and media tooling
 docs                  engine notes, spike results, and the README's images and video
 ```
@@ -167,7 +162,7 @@ pnpm --filter ui typecheck && pnpm --filter ui test
 cargo clippy --workspace --all-targets -- -D warnings
 ```
 
-The TypeScript bindings in `ui/src/bindings.ts` are generated from the Rust types (`cargo test -p llm-trainer-app export_bindings`). The Python reference fixtures are regenerated with `.venv/bin/python tools/golden/dump_model.py` (needs the reference cloned into `tools/golden/ref`).
+The TypeScript bindings in `ui/src/bindings.ts` are generated from the Rust types (`cargo test -p llm-trainer-app export_bindings`). The golden test fixtures are regenerated with `.venv/bin/python tools/golden/dump_model.py`; `tools/golden/README.md` has the setup.
 
 ### Re-recording the screenshots and video (macOS)
 
@@ -194,4 +189,4 @@ The display must stay awake while recording, because a sleeping display gives bl
 
 ## Credits and licence
 
-Based on [mini-AGI](https://github.com/volotat/mini-AGI) by volotat (MIT). Starter text comes from [TinyStories](https://huggingface.co/datasets/roneneldan/TinyStories) (CDLA-Sharing-1.0). LLM Trainer itself is released under the [MIT licence](LICENSE).
+Inspired by [MiniAGI](https://github.com/volotat/mini-AGI). Starter text comes from [TinyStories](https://huggingface.co/datasets/roneneldan/TinyStories) (CDLA-Sharing-1.0). LLM Trainer itself is released under the [MIT licence](LICENSE).
