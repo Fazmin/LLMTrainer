@@ -4,6 +4,7 @@ import { NavLink } from "react-router";
 import { useAppInfo, useHardware } from "../state/queries";
 import { useLive } from "../state/live";
 import { usePrefs, type ThemeChoice } from "../state/prefs";
+import { InfoPopover } from "./explain";
 
 const NAV = [
   { to: "/data", label: "Text", icon: Database },
@@ -61,6 +62,7 @@ export function Sidebar() {
           <span>
             {cpuOnly ? "No GPU found. Training runs on the CPU and is much slower." : `Training on ${backend?.name ?? "…"}`}
           </span>
+          <InfoPopover topic="sidebar.hardware" />
         </p>
 
         <div className="flex items-center justify-between">

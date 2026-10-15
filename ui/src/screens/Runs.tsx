@@ -7,6 +7,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { backend } from "../backend";
 import type { ImportPreview, RunState, RunSummary } from "../bindings";
 import { Button } from "../components/Button";
+import { InfoPopover } from "../components/explain";
 import { RUN_STATES } from "../content/stages";
 import { describeError } from "../content/errors";
 import { fmtBits, fmtCount, fmtDuration, fmtWhen, natsToBits } from "../lib/format";
@@ -119,10 +120,10 @@ export function Runs() {
             <tr className="text-left text-[13px] text-ink-2">
               <th className="w-8 py-2 pr-2"><span className="sr-only">Select to compare</span></th>
               <th className="py-2 pr-4 font-medium">Name</th>
-              <th className="py-2 pr-4 font-medium">Status</th>
-              <th className="py-2 pr-4 font-medium">Size</th>
+              <th className="py-2 pr-4 font-medium"><span className="inline-flex items-center gap-1">Status<InfoPopover topic="runs.status" /></span></th>
+              <th className="py-2 pr-4 font-medium"><span className="inline-flex items-center gap-1">Size<InfoPopover topic="runs.size" /></span></th>
               <th className="py-2 pr-4 text-right font-medium">Text read</th>
-              <th className="py-2 pr-4 text-right font-medium">Best score</th>
+              <th className="py-2 pr-4 text-right font-medium"><span className="inline-flex items-center gap-1">Best score<InfoPopover topic="runs.best" /></span></th>
               <th className="py-2 pr-4 text-right font-medium">Trained for</th>
               <th className="py-2 pr-4 font-medium">Started</th>
               <th className="w-10" />

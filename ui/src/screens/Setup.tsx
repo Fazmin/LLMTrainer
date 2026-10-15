@@ -5,7 +5,7 @@ import { Link, useNavigate, useSearchParams } from "react-router";
 import { backend } from "../backend";
 import type { Goal, Preset, PresetConfig, TrainConfig } from "../bindings";
 import { Button } from "../components/Button";
-import { Term } from "../components/explain";
+import { InfoHeading, Term } from "../components/explain";
 import { describeError } from "../content/errors";
 import { PRESET_COPY } from "../content/presets";
 import { fmtCount } from "../lib/format";
@@ -151,7 +151,7 @@ export function Setup() {
       )}
 
       <section className="mt-9" aria-labelledby="text-h">
-        <h2 id="text-h" className="m-0 text-lg font-semibold">What should it read?</h2>
+        <InfoHeading topic="setup.text" id="text-h" />
         {ready.length === 0 ? (
           <div className="mt-3 rounded-[var(--radius-panel)] border border-hairline bg-surface p-5">
             <p className="m-0 text-[15px] font-medium">You need some text to learn from first.</p>
@@ -174,7 +174,7 @@ export function Setup() {
       </section>
 
       <section className="mt-10 border-t border-hairline pt-8" aria-labelledby="size-h">
-        <h2 id="size-h" className="m-0 text-lg font-semibold">How big a model?</h2>
+        <InfoHeading topic="setup.size" id="size-h" />
         <p className="mt-1 text-sm text-ink-2">Bigger models write better but need more memory and time. The numbers below are for this computer.</p>
         <div role="radiogroup" aria-labelledby="size-h" className="mt-4 grid gap-4 md:grid-cols-3">
           {(presets.data ?? []).map((p) => (
@@ -185,7 +185,7 @@ export function Setup() {
       </section>
 
       <section className="mt-10 border-t border-hairline pt-8" aria-labelledby="goal-h">
-        <h2 id="goal-h" className="m-0 text-lg font-semibold">How long should it train?</h2>
+        <InfoHeading topic="setup.goal" id="goal-h" />
         <div role="radiogroup" aria-labelledby="goal-h" className="mt-3 flex flex-wrap gap-2">
           {GOALS.map((g) => (
             <label key={g.id} className={clsx("cursor-pointer rounded-[var(--radius-control)] border px-4 py-2 text-sm font-medium transition-colors", g.id === goal.id ? "border-accent bg-accent-soft text-accent-ink" : "border-hairline bg-surface text-ink-2 hover:border-axis")}>
@@ -214,7 +214,7 @@ export function Setup() {
 
       {level === "advanced" && train && (
         <section className="mt-10 border-t border-hairline pt-8" aria-labelledby="adv-h">
-          <h2 id="adv-h" className="m-0 text-lg font-semibold">Advanced settings</h2>
+          <InfoHeading topic="setup.advanced" id="adv-h" />
           <p className="mt-1 text-sm text-ink-2">The defaults suit most people. Changing these makes this a custom run.</p>
           <div className="mt-4 grid gap-5 sm:grid-cols-2">
             <NumberField label={<Term k="learning_rate">Learning rate</Term>} help="How big a step it takes when it learns. The app adjusts it as it goes." value={train.lr} step={0.0001} min={0} onChange={(v) => setEdits((e) => ({ ...e, lr: v }))} />
@@ -226,7 +226,7 @@ export function Setup() {
       )}
 
       <section className="mt-10 border-t border-hairline pt-8" aria-labelledby="pre-h">
-        <h2 id="pre-h" className="m-0 text-lg font-semibold">Before you start</h2>
+        <InfoHeading topic="setup.checks" id="pre-h" />
         <ul className="m-0 mt-3 list-none space-y-2 p-0">
           {checks.map((c) => (
             <li key={c.text} className="flex items-start gap-2.5 text-[14px]">

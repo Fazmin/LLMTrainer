@@ -8,8 +8,7 @@ export type TermKey =
   | "checkpoint"
   | "lane"
   | "gap"
-  | "context"
-  | "growing";
+  | "context";
 
 export const GLOSSARY: Record<TermKey, { label: string; text: string }> = {
   bits_per_char: {
@@ -47,9 +46,5 @@ export const GLOSSARY: Record<TermKey, { label: string; text: string }> = {
   context: {
     label: "context window",
     text: "How many characters back the model can look when guessing the next one. It starts small and grows as the model improves.",
-  },
-  growing: {
-    label: "growing",
-    text: "Every so often the model may add a new expert, if five checks pass: there is room, experts are being used, newcomers are earning their place, not too many are on trial, and it is not just memorising.",
   },
 };

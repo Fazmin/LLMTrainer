@@ -6,6 +6,7 @@ import { backend } from "../backend";
 import type { Goal, RunSummary } from "../bindings";
 import { describeError } from "../content/errors";
 import { Button } from "./Button";
+import { InfoPopover } from "./explain";
 
 const GOALS: { id: string; label: string; goal: Goal }[] = [
   { id: "stop", label: "Until I stop it", goal: { type: "until_stopped" } },
@@ -96,12 +97,15 @@ export function ForkDialog({ run, open, onOpenChange }: { run: RunSummary; open:
                 {ready.map((d) => <option key={d.id} value={d.id}>{d.id === run.datasetId ? `Same as before: ${d.name}` : d.name}</option>)}
               </select>
             </label>
-            <label className="block text-sm font-medium">
-              How fast it learns
-              <select value={rate} onChange={(e) => setRate(e.target.value)} className={select}>
+            <div>
+              <div className="flex items-center gap-1.5">
+                <label htmlFor="fork-rate" className="text-sm font-medium">How fast it learns</label>
+                <InfoPopover topic="fork.rate" />
+              </div>
+              <select id="fork-rate" value={rate} onChange={(e) => setRate(e.target.value)} className={select}>
                 {RATES.map((r) => <option key={r.id} value={r.id}>{r.label}</option>)}
               </select>
-            </label>
+            </div>
             <label className="block text-sm font-medium">
               Train for
               <select value={goalId} onChange={(e) => setGoalId(e.target.value)} className={select}>

@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { Check, X } from "lucide-react";
 import type { PoolSnapshot } from "../bindings";
-import { Term } from "./explain";
+import { InfoHeading, Term } from "./explain";
 
 const BRAKES: { key: keyof PoolSnapshot["brakes"]; label: string }[] = [
   { key: "room", label: "There is room" },
@@ -20,7 +20,7 @@ export function ExpertsPanel({ pool }: { pool: PoolSnapshot | null }) {
   return (
     <div className="grid gap-x-12 gap-y-8 lg:grid-cols-[1fr_1fr]">
       <div>
-        <h3 className="m-0 text-[15px] font-semibold">Working now ({pool.resident.length} of {pool.nExperts})</h3>
+        <InfoHeading topic="experts.working" level={3}>Working now ({pool.resident.length} of {pool.nExperts})</InfoHeading>
         <p className="mt-1 max-w-[52ch] text-[13px] text-ink-2">
           These <Term k="experts" /> are loaded and doing the work. Darker means busier. A ring marks a newcomer still on trial; a dashed outline marks one that is barely used.
         </p>
@@ -39,7 +39,7 @@ export function ExpertsPanel({ pool }: { pool: PoolSnapshot | null }) {
       </div>
 
       <div>
-        <h3 className="m-0 text-[15px] font-semibold"><Term k="growing">Can the pool grow?</Term></h3>
+        <InfoHeading topic="experts.grow" level={3} />
         <p className="mt-1 max-w-[52ch] text-[13px] text-ink-2">
           {pool.brakes.room.ok && pool.brakes.used.ok && pool.brakes.earning.ok && pool.brakes.fits.ok && pool.brakes.honest.ok
             ? "All five checks pass, so a new expert may be added soon."
@@ -61,7 +61,7 @@ export function ExpertsPanel({ pool }: { pool: PoolSnapshot | null }) {
       </div>
 
       <div className="lg:col-span-2">
-        <h3 className="m-0 text-[15px] font-semibold">Everyone in the pool, busiest first</h3>
+        <InfoHeading topic="experts.all" level={3}>Everyone in the pool, busiest first</InfoHeading>
         <p className="mt-1 text-[13px] text-ink-2">{pool.nExperts} experts. A few do most of the work, which is normal.</p>
         <div className="mt-3 flex h-16 items-end gap-[2px]" role="img" aria-label={`Usage of all ${pool.nExperts} experts, busiest first`}>
           {pool.usage.map((u, i) => (

@@ -3,6 +3,7 @@ import { FolderOpen } from "lucide-react";
 import { Link } from "react-router";
 import { backend } from "../backend";
 import { Button } from "../components/Button";
+import { InfoHeading } from "../components/explain";
 import { fmtBytes } from "../lib/format";
 import { usePrefs, type ThemeChoice } from "../state/prefs";
 import { useAppInfo, useHardware } from "../state/queries";
@@ -41,7 +42,7 @@ export function Settings() {
       <h1 className="m-0 text-[26px] font-semibold tracking-tight">Settings</h1>
 
       <section className="mt-9" aria-labelledby="look-h">
-        <h2 id="look-h" className="m-0 text-lg font-semibold">How it looks</h2>
+        <InfoHeading topic="settings.look" id="look-h" />
         <div role="radiogroup" aria-label="Theme" className="mt-3 flex flex-wrap gap-2">
           {THEMES.map((t) => (
             <label key={t.id} className={`cursor-pointer rounded-[var(--radius-control)] border px-4 py-2 text-sm font-medium ${theme === t.id ? "border-accent bg-accent-soft text-accent-ink" : "border-hairline bg-surface text-ink-2 hover:border-axis"}`}>
@@ -60,7 +61,7 @@ export function Settings() {
       </section>
 
       <section className="mt-10 border-t border-hairline pt-8" aria-labelledby="disk-h">
-        <h2 id="disk-h" className="m-0 text-lg font-semibold">Disk space</h2>
+        <InfoHeading topic="settings.disk" id="disk-h" />
         <p className="mt-1 text-sm text-ink-2">Everything the app keeps lives in one folder on this computer.</p>
         <div className="mt-4">
           <Row
@@ -90,7 +91,7 @@ export function Settings() {
       </section>
 
       <section className="mt-10 border-t border-hairline pt-8" aria-labelledby="pc-h">
-        <h2 id="pc-h" className="m-0 text-lg font-semibold">This computer</h2>
+        <InfoHeading topic="settings.computer" id="pc-h" />
         <div className="mt-4">
           <Row label="Processor" value={hw.data?.cpu ?? "…"} />
           <Row label="Memory" value={hw.data ? `${hw.data.ramGb.toFixed(0)} GB` : "…"} />
@@ -99,7 +100,7 @@ export function Settings() {
       </section>
 
       <section className="mt-10 border-t border-hairline pt-8" aria-labelledby="about-h">
-        <h2 id="about-h" className="m-0 text-lg font-semibold">About</h2>
+        <InfoHeading topic="settings.about" id="about-h" />
         <div className="mt-4">
           <Row label="Version" value={info.data ? `LLM Trainer ${info.data.version}` : "…"} />
           <Row label="Engine" value={info.data ? (info.data.isMock ? "Simulated (numbers are not from a real model)" : info.data.engineVersion) : "…"} />

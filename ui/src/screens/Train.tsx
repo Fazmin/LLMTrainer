@@ -6,6 +6,7 @@ import type { RunSummary, SeriesData } from "../bindings";
 import { Button } from "../components/Button";
 import { ForkDialog } from "../components/ForkDialog";
 import { ExpertsPanel, HaltingBars } from "../components/Experts";
+import { InfoHeading } from "../components/explain";
 import { StageBanner } from "../components/StageBanner";
 import { TabStrip } from "../components/Tabs";
 import { type Annotation, type ChartLine, TimeSeriesChart } from "../components/TimeSeriesChart";
@@ -92,13 +93,13 @@ export function Train() {
 
         <section className="mt-6 grid gap-x-14 gap-y-8 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]" aria-label="What the model can do now">
           <div>
-            <h2 className="m-0 mb-3 text-lg font-semibold">What it writes</h2>
+            <InfoHeading topic="train.writing" className="mb-3" />
             <Writing runId={runId} version={version} live={active} />
           </div>
           <div className="flex flex-col gap-8 lg:border-l lg:border-hairline lg:pl-10">
             <VerdictCard verdict={verdict} insight={insight} />
             <div>
-              <h3 className="m-0 mb-2.5 text-[15px] font-semibold">How far along</h3>
+              <InfoHeading topic="train.milestones" level={3} className="mb-2.5" />
               <MilestoneStrip insight={insight} />
             </div>
           </div>
@@ -286,7 +287,7 @@ function ThinkingTab({ runId, version, live }: { runId: number; version: number;
   return (
     <div className="grid gap-x-12 gap-y-9 md:grid-cols-2">
       <div>
-        <h3 className="m-0 mb-1 text-[15px] font-semibold">{CHART_INFO.halting.title}</h3>
+        <InfoHeading topic="halting" level={3} className="mb-1" />
         <p className="mb-4 max-w-[48ch] text-[13px] text-ink-2">{CHART_INFO.halting.how}</p>
         <HaltingBars hist={hist} />
       </div>
@@ -311,7 +312,7 @@ function SystemTab({ run, version }: { run: RunSummary; version: number }) {
   return (
     <div className="grid gap-x-12 gap-y-9 md:grid-cols-2">
       <div>
-        <h3 className="m-0 text-[15px] font-semibold">This computer</h3>
+        <InfoHeading topic="system.computer" level={3} />
         <dl className="mt-3 grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 text-[13.5px]">
           <dt className="text-ink-2">Processor</dt><dd className="m-0 text-right">{hw.data?.cpu ?? "…"}</dd>
           <dt className="text-ink-2">Memory</dt><dd className="m-0 text-right">{hw.data ? `${hw.data.ramGb.toFixed(0)} GB` : "…"}</dd>
@@ -321,7 +322,7 @@ function SystemTab({ run, version }: { run: RunSummary; version: number }) {
         </dl>
         {warnings.length > 0 && (
           <div className="mt-6">
-            <h3 className="m-0 text-[15px] font-semibold">Warnings</h3>
+            <InfoHeading topic="system.warnings" level={3} />
             <ul className="m-0 mt-2 list-none space-y-2 p-0 text-[13.5px]">
               {warnings.map((w) => (
                 <li key={w.at + w.code}>
@@ -334,7 +335,7 @@ function SystemTab({ run, version }: { run: RunSummary; version: number }) {
         )}
       </div>
       <div>
-        <h3 className="m-0 text-[15px] font-semibold">Saved progress</h3>
+        <InfoHeading topic="system.saves" level={3} />
         {(ckpts.data?.length ?? 0) === 0 ? (
           <p className="mt-2 text-[13.5px] text-muted">Nothing saved yet. It saves automatically every few minutes.</p>
         ) : (

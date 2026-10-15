@@ -8,6 +8,7 @@ import { describeError } from "../content/errors";
 import { fmtDuration } from "../lib/format";
 import { useLive } from "../state/live";
 import { Button } from "./Button";
+import { InfoPopover } from "./explain";
 
 type Tone = "active" | "paused" | "bad" | "done" | "idle";
 
@@ -74,6 +75,7 @@ export function StageBanner({ run, onResume }: { run: RunSummary | null; onResum
               <span aria-hidden className={clsx("inline-block h-2.5 w-2.5 rounded-full", TONE[tone].dot, reading && "pulse-dot")} />
             )}
             <h2 className="m-0 text-[17px] font-semibold leading-tight">{copy.title}</h2>
+            <InfoPopover topic="train.stage" />
             {isLiveRun && active && live.stage?.detail && <span className="text-[13px] text-muted">{live.stage.detail}</span>}
           </div>
           <p className="mt-1 max-w-[68ch] text-[13.5px] leading-snug text-ink-2">{fail ? `${fail.title}. ${fail.body}` : stateErr ? stateErr.body : copy.blurb}</p>

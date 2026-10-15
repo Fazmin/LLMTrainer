@@ -7,7 +7,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { backend } from "../backend";
 import type { DatasetDetail, DatasetSummary, StarterInfo } from "../bindings";
 import { Button } from "../components/Button";
-import { Term } from "../components/explain";
+import { InfoHeading, InfoPopover, Term } from "../components/explain";
 import { JobBar } from "../components/JobBar";
 import { fmtBytes, fmtCount, isCodeLike, laneColor } from "../lib/format";
 import { useJobRunner } from "../state/jobs";
@@ -101,7 +101,7 @@ function Peek({ datasetId, lanes }: { datasetId: number; lanes: string[] }) {
   return (
     <div>
       <div className="flex flex-wrap items-center gap-3">
-        <h3 className="m-0 text-[15px] font-semibold">A peek at what it will read</h3>
+        <InfoHeading topic="data.peek" level={3} />
         {lanes.length > 1 && (
           <select value={lane} onChange={(e) => setLane(e.target.value)} aria-label="Kind of text to look at" className="h-8 rounded-[var(--radius-control)] border border-hairline bg-surface px-2 text-[13px]">
             {lanes.map((l) => <option key={l}>{l}</option>)}
@@ -219,7 +219,7 @@ export function Data() {
       )}
 
       <section className="mt-9" aria-labelledby="start-h">
-        <h2 id="start-h" className="m-0 text-lg font-semibold">Start with something ready</h2>
+        <InfoHeading topic="data.starters" id="start-h" />
         <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {(starters.data ?? []).filter((s) => s.id !== "tinystories-full").map((s) => (
             <StarterCard key={s.id} info={s} dataset={list.find((x) => x.starterId === s.id)} busy={startingId === s.id} anyBusy={!!job} onGet={() => get(s)} />
@@ -228,7 +228,7 @@ export function Data() {
       </section>
 
       <section className="mt-10 border-t border-hairline pt-8" aria-labelledby="own-h">
-        <h2 id="own-h" className="m-0 text-lg font-semibold">Use your own text</h2>
+        <InfoHeading topic="data.own" id="own-h" />
         <div className="mt-4 flex flex-col items-center rounded-[var(--radius-panel)] border-2 border-dashed border-axis px-6 py-9 text-center">
           <FolderOpen size={26} className="text-muted" aria-hidden />
           <p className="mt-3 text-[15px] font-medium">Drop folders or files here</p>
@@ -240,7 +240,7 @@ export function Data() {
       </section>
 
       <section className="mt-10 border-t border-hairline pt-8" aria-labelledby="mine-h">
-        <h2 id="mine-h" className="m-0 text-lg font-semibold">What you have</h2>
+        <InfoHeading topic="data.mine" id="mine-h" />
         {list.length === 0 ? (
           <p className="mt-3 text-[14px] text-ink-2">Nothing yet. Pick a ready-made set above, or add your own folder.</p>
         ) : (
@@ -267,7 +267,10 @@ export function Data() {
               <div className="min-w-0 space-y-8">
                 <div className="flex flex-wrap items-start gap-4">
                   <div className="min-w-0 flex-1">
-                    <h3 className="m-0 text-xl font-semibold">{d.summary.name}</h3>
+                    <div className="flex items-center gap-1.5">
+                      <h3 className="m-0 text-xl font-semibold">{d.summary.name}</h3>
+                      <InfoPopover topic="data.detail" />
+                    </div>
                     <p className="mt-1 text-[13.5px] text-ink-2">
                       {KIND_LABEL[d.summary.kind]}. {mb(Number(d.summary.trainBytes))} to learn from, {mb(Number(d.summary.valBytes))} kept aside to test it.
                     </p>
@@ -289,7 +292,7 @@ export function Data() {
 
                 {d.summary.kind === "linked" && d.summary.status === "ready" && split.data && (
                   <div>
-                    <h3 className="m-0 text-[15px] font-semibold">Keep some aside for testing</h3>
+                    <InfoHeading topic="data.split" level={3} />
                     <p className="mt-1 max-w-[60ch] text-[13px] text-ink-2">
                       This share is never learned from. It is what <Term k="held_out">tests the model</Term> on text it has not seen. A few percent is plenty.
                     </p>

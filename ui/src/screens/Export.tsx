@@ -4,6 +4,7 @@ import { Link, useSearchParams } from "react-router";
 import { backend } from "../backend";
 import type { ExportResult } from "../bindings";
 import { Button } from "../components/Button";
+import { InfoPopover } from "../components/explain";
 import { JobBar } from "../components/JobBar";
 import { fmtBits, fmtBytes, fmtCount, fmtWhen, natsToBits } from "../lib/format";
 import { useJobRunner } from "../state/jobs";
@@ -53,27 +54,32 @@ export function Export() {
       ) : (
         <>
           <section className="mt-9">
-            <label className="block">
-              <span className="text-lg font-semibold">Which model?</span>
-              <select value={runId ?? ""} onChange={(e) => { setRunId(Number(e.target.value)); setSaveId("best"); setDone(null); }} className="mt-2 block h-10 w-full max-w-[460px] rounded-[var(--radius-control)] border border-hairline bg-surface px-3 text-[15px]">
-                {choices.map((r) => <option key={r.id} value={r.id}>{r.name} ({fmtCount(r.charsRead)} characters read)</option>)}
-              </select>
-            </label>
+            <div className="flex items-center gap-1.5">
+              <label htmlFor="export-model" className="text-lg font-semibold">Which model?</label>
+              <InfoPopover topic="export.model" />
+            </div>
+            <select id="export-model" value={runId ?? ""} onChange={(e) => { setRunId(Number(e.target.value)); setSaveId("best"); setDone(null); }} className="mt-2 block h-10 w-full max-w-[460px] rounded-[var(--radius-control)] border border-hairline bg-surface px-3 text-[15px]">
+              {choices.map((r) => <option key={r.id} value={r.id}>{r.name} ({fmtCount(r.charsRead)} characters read)</option>)}
+            </select>
           </section>
 
           <section className="mt-8">
-            <label className="block">
-              <span className="text-lg font-semibold">Which saved version?</span>
-              <select value={saveId} onChange={(e) => setSaveId(e.target.value === "best" ? "best" : Number(e.target.value))} className="mt-2 block h-10 w-full max-w-[460px] rounded-[var(--radius-control)] border border-hairline bg-surface px-3 text-[15px]">
-                <option value="best">The best one (recommended)</option>
-                {list.map((c) => <option key={c.id} value={c.id}>{fmtWhen(c.createdAt)}, {fmtCount(c.chars)} characters, score {fmtBits(natsToBits(c.heldoutNats))}</option>)}
-              </select>
-            </label>
+            <div className="flex items-center gap-1.5">
+              <label htmlFor="export-version" className="text-lg font-semibold">Which saved version?</label>
+              <InfoPopover topic="export.version" />
+            </div>
+            <select id="export-version" value={saveId} onChange={(e) => setSaveId(e.target.value === "best" ? "best" : Number(e.target.value))} className="mt-2 block h-10 w-full max-w-[460px] rounded-[var(--radius-control)] border border-hairline bg-surface px-3 text-[15px]">
+              <option value="best">The best one (recommended)</option>
+              {list.map((c) => <option key={c.id} value={c.id}>{fmtWhen(c.createdAt)}, {fmtCount(c.chars)} characters, score {fmtBits(natsToBits(c.heldoutNats))}</option>)}
+            </select>
             {chosen && <p className="mt-2 text-[13.5px] text-ink-2">This one is about {fmtBytes(Number(chosen.bytes))} and scored {fmtBits(natsToBits(chosen.heldoutNats))} bits per character.</p>}
           </section>
 
           <section className="mt-8 rounded-[var(--radius-panel)] border border-hairline bg-surface p-5">
-            <h2 className="m-0 text-[15px] font-semibold">What you get</h2>
+            <div className="flex items-center gap-1.5">
+              <h2 className="m-0 text-[15px] font-semibold">What you get</h2>
+              <InfoPopover topic="export.contents" />
+            </div>
             <ul className="m-0 mt-2 list-disc space-y-1 pl-5 text-[14px] text-ink-2">
               <li>The saved model, exactly as it is.</li>
               <li>A short description file, so the app knows what it is.</li>

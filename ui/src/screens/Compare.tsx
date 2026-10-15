@@ -7,6 +7,7 @@ import { VERDICTS } from "../content/verdict";
 import { configDiff, formatValue, keyLabel } from "../lib/diff";
 import { fmtBits, fmtCount, fmtDuration, natsToBits } from "../lib/format";
 import { isCodeLike } from "../lib/format";
+import { InfoHeading } from "../components/explain";
 import { type ChartLine, TimeSeriesChart } from "../components/TimeSeriesChart";
 import clsx from "clsx";
 
@@ -77,7 +78,7 @@ export function Compare() {
       </section>
 
       <section className="mt-10 border-t border-hairline pt-8" aria-labelledby="final-h">
-        <h2 id="final-h" className="m-0 text-lg font-semibold">How each one ended</h2>
+        <InfoHeading topic="compare.results" id="final-h" />
         <table className="mt-4 w-full border-collapse text-sm">
           <thead>
             <tr className="text-left text-[13px] text-ink-2">
@@ -116,7 +117,7 @@ export function Compare() {
       </section>
 
       <section className="mt-10 border-t border-hairline pt-8" aria-labelledby="diff-h">
-        <h2 id="diff-h" className="m-0 text-lg font-semibold">What was different</h2>
+        <InfoHeading topic="compare.diff" id="diff-h" />
         {diff.length === 0 ? (
           <p className="mt-3 text-[14px] text-ink-2">These runs used exactly the same settings.</p>
         ) : (
@@ -163,7 +164,7 @@ export function Compare() {
       </section>
 
       <section className="mt-10 border-t border-hairline pt-8" aria-labelledby="write-h">
-        <h2 id="write-h" className="m-0 text-lg font-semibold">What each one writes</h2>
+        <InfoHeading topic="compare.samples" id="write-h" />
         <p className="mt-1 text-[13.5px] text-ink-2">The same opening, continued by each model at the end of its run.</p>
         <div className="mt-5 grid gap-x-8 gap-y-6 md:grid-cols-2">
           {list.map((r, i) => {

@@ -5,6 +5,7 @@ import { useSearchParams } from "react-router";
 import { backend } from "../backend";
 import type { ChatEvent, ChatMessage, ChatMode, ChatSessionInfo } from "../bindings";
 import { Button } from "../components/Button";
+import { InfoHeading, InfoPopover } from "../components/explain";
 import { describeError } from "../content/errors";
 import { fmtCount } from "../lib/format";
 import { useLive } from "../state/live";
@@ -217,25 +218,27 @@ export function Chat() {
         ) : (
           <>
             <section className="mt-9">
-              <label className="block">
-                <span className="text-lg font-semibold">Which model?</span>
-                <select
-                  value={runId ?? ""}
-                  onChange={(e) => setRunId(Number(e.target.value))}
-                  className="mt-2 block h-10 w-full max-w-[460px] rounded-[var(--radius-control)] border border-hairline bg-surface px-3 text-[15px]"
-                >
-                  {choices.map((r) => (
-                    <option key={r.id} value={r.id}>
-                      {r.name} ({fmtCount(r.charsRead)} characters read)
-                    </option>
-                  ))}
-                </select>
-              </label>
+              <div className="flex items-center gap-1.5">
+                <label htmlFor="chat-model" className="text-lg font-semibold">Which model?</label>
+                <InfoPopover topic="chat.model" />
+              </div>
+              <select
+                id="chat-model"
+                value={runId ?? ""}
+                onChange={(e) => setRunId(Number(e.target.value))}
+                className="mt-2 block h-10 w-full max-w-[460px] rounded-[var(--radius-control)] border border-hairline bg-surface px-3 text-[15px]"
+              >
+                {choices.map((r) => (
+                  <option key={r.id} value={r.id}>
+                    {r.name} ({fmtCount(r.charsRead)} characters read)
+                  </option>
+                ))}
+              </select>
               {trainingActive && <p className="mt-2 max-w-[56ch] text-[13px] text-ink-2">A training is running, so replies may be slower while it shares your computer.</p>}
             </section>
 
             <section className="mt-9" aria-labelledby="mode-h">
-              <h2 id="mode-h" className="m-0 text-lg font-semibold">How should it respond?</h2>
+              <InfoHeading topic="chat.mode" id="mode-h" />
               <div role="radiogroup" aria-labelledby="mode-h" className="mt-3 grid gap-3 sm:grid-cols-2">
                 {MODES.map((m) => (
                   <label key={m.id} className={clsx("cursor-pointer rounded-[var(--radius-panel)] border bg-surface p-4", mode === m.id ? "border-accent ring-1 ring-accent" : "border-hairline hover:border-axis")}>
@@ -355,7 +358,10 @@ export function Chat() {
 
         <aside className="space-y-7 lg:border-l lg:border-hairline lg:pl-8" aria-label="How the model is thinking">
           <section>
-            <h2 className="m-0 text-[15px] font-semibold">How it thinks</h2>
+            <div className="flex items-center gap-1.5">
+              <h2 className="m-0 text-[15px] font-semibold">How it thinks</h2>
+              <InfoPopover topic="chat.thinking" />
+            </div>
             <p className="mt-1 text-[13px] text-ink-2">
               {avgRows != null ? <>On average <span className="font-semibold text-ink">{avgRows.toFixed(1)}</span> thinking steps per character.</> : "Thinking steps per character appear here."}
             </p>
@@ -375,7 +381,10 @@ export function Chat() {
           {session.supportsLearn && (
             <section>
               <div className="flex items-center justify-between gap-3">
-                <h2 className="m-0 text-[15px] font-semibold">Learn from this chat</h2>
+                <div className="flex items-center gap-1.5">
+                  <h2 className="m-0 text-[15px] font-semibold">Learn from this chat</h2>
+                  <InfoPopover topic="chat.learn" />
+                </div>
                 <Switch checked={session.learnEnabled} onChange={toggleLearn} label="Learn from this chat" />
               </div>
               <p className="mt-2 text-[13px] leading-snug text-ink-2">

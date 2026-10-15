@@ -248,7 +248,7 @@ export function TimeSeriesChart({
     <section aria-label={title} className="min-w-0">
       <header className="mb-2 flex flex-wrap items-center gap-x-3 gap-y-1">
         <h3 className="m-0 text-[15px] font-semibold">{title}</h3>
-        <InfoPopover chart={chart} />
+        <InfoPopover topic={chart} />
         {caption && <span className="text-[13px] text-muted">{caption}</span>}
         <div className="ml-auto flex items-center gap-1">
           {lines.length >= 2 && (

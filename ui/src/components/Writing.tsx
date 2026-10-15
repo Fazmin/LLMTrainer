@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { useEffect, useMemo, useState } from "react";
 import { fmtCount, isCodeLike, laneColor, laneSlot } from "../lib/format";
 import { useSampleSteps, useSamples } from "../state/queries";
-import { Term } from "./explain";
+import { InfoPopover } from "./explain";
 
 /**
  * "Watch it learn to write." The model's own text, typeset as prose, with a slider through every sample round so the
@@ -62,10 +62,13 @@ export function Writing({ runId, version, live }: { runId: number | null; versio
             ))}
           </div>
         )}
-        <label className="ml-auto flex items-center gap-2 text-[13px] text-ink-2">
-          <input type="checkbox" checked={guard} onChange={(e) => setGuard(e.target.checked)} className="accent-[var(--accent)]" />
-          Repetition guard
-        </label>
+        <span className="ml-auto flex items-center gap-1.5">
+          <label className="flex items-center gap-2 text-[13px] text-ink-2">
+            <input type="checkbox" checked={guard} onChange={(e) => setGuard(e.target.checked)} className="accent-[var(--accent)]" />
+            Repetition guard
+          </label>
+          <InfoPopover topic="train.guard" />
+        </span>
       </div>
 
       <div className="mt-4 min-h-[170px]">
@@ -96,7 +99,7 @@ export function Writing({ runId, version, live }: { runId: number | null; versio
           <div className="mt-1.5 flex items-center justify-between text-[13px] text-ink-2">
             <span>
               After <span className="font-medium text-ink">{fmtCount(round.chars)}</span> characters read
-              {active.rawRep8 != null && guard === false && active.rawRep8 > 15 && <> It is repeating itself a lot; <Term k="held_out">the guard</Term> helps with that.</>}
+              {active.rawRep8 != null && guard === false && active.rawRep8 > 15 && <> It is repeating itself a lot; the guard helps with that.</>}
             </span>
             {live && following ? <span className="font-medium text-accent-ink">Following live</span> : <button className="text-accent-ink underline underline-offset-2" onClick={() => setPick(null)}>Jump to latest</button>}
           </div>

@@ -3,7 +3,7 @@ import { AlertTriangle, Clock, Copy, Minus, TrendingDown } from "lucide-react";
 import type { Insight, Verdict } from "../bindings";
 import { ADVICE, MILESTONES, VERDICTS } from "../content/verdict";
 import { choicesGloss, fmtBits, fmtCount, fmtDuration, fmtRate, fmtRoughTime, readingGloss } from "../lib/format";
-import { Term } from "./explain";
+import { InfoPopover, type InfoTopic, Term } from "./explain";
 
 const ICONS = { clock: Clock, "trending-down": TrendingDown, minus: Minus, copy: Copy, alert: AlertTriangle } as const;
 const TONE = {
@@ -21,7 +21,7 @@ export function VerdictCard({ verdict, insight }: { verdict: Verdict | null; ins
   const change = insight?.report.changePct;
   return (
     <div>
-      <p className="m-0 text-[13px] text-ink-2">Is it learning?</p>
+      <p className="m-0 flex items-center gap-1 text-[13px] text-ink-2"><span>Is it learning?</span><InfoPopover topic="train.verdict" /></p>
       <p className={clsx("mt-1 flex items-center gap-2 text-[17px] font-semibold leading-tight", TONE[v.tone])}>
         <Icon size={18} aria-hidden />
         <span className="text-ink">{v.label}</span>
@@ -45,9 +45,9 @@ interface HeroProps {
   goalMinutes: number | null;
 }
 
-const Stat = ({ label, value, unit, gloss }: { label: React.ReactNode; value: React.ReactNode; unit?: string; gloss?: React.ReactNode }) => (
+const Stat = ({ label, info, value, unit, gloss }: { label: React.ReactNode; info: InfoTopic; value: React.ReactNode; unit?: string; gloss?: React.ReactNode }) => (
   <div className="min-w-0 px-6 first:pl-0 last:pr-0">
-    <p className="m-0 text-[13px] text-ink-2">{label}</p>
+    <p className="m-0 flex items-center gap-1 text-[13px] text-ink-2"><span>{label}</span><InfoPopover topic={info} /></p>
     <p className="mt-1 flex items-baseline gap-1.5 text-[30px] font-semibold leading-none tracking-tight">
       {value}
       {unit && <span className="text-[13px] font-normal tracking-normal text-muted">{unit}</span>}
@@ -65,6 +65,7 @@ export function HeroStats({ insight, lastNats, prevBits, chars, cps, activeMs, g
     <div className="grid grid-cols-2 gap-y-6 divide-hairline md:grid-cols-4 md:divide-x">
       <Stat
         label={<>Test score <Term k="bits_per_char">(bits per character)</Term></>}
+        info="train.score"
         value={bits != null ? fmtBits(bits) : "–"}
         gloss={
           bits == null ? "Appears after the first progress check." : (
@@ -79,10 +80,11 @@ export function HeroStats({ insight, lastNats, prevBits, chars, cps, activeMs, g
           )
         }
       />
-      <Stat label="Text read" value={fmtCount(chars)} unit="characters" gloss={`That is ${readingGloss(chars)}.`} />
-      <Stat label="Reading speed" value={fmtRate(cps)} unit="characters per second" gloss="Steady is good." />
+      <Stat label="Text read" info="train.textRead" value={fmtCount(chars)} unit="characters" gloss={`That is ${readingGloss(chars)}.`} />
+      <Stat label="Reading speed" info="train.speed" value={fmtRate(cps)} unit="characters per second" gloss="Steady is good." />
       <Stat
         label="Time"
+        info="train.time"
         value={fmtDuration(activeMs)}
         gloss={
           eta && eta.seconds > 0
